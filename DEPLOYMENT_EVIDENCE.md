@@ -181,11 +181,16 @@ process_cpu_seconds_total 1.51
 - **Command:** `terraform validate`
 - **Status:** **PASSED** (`Success! The configuration is valid.`).
 
-### 3.4 Execution Plan Analysis
-- **Command:** `terraform plan`
-- **Status:** **PASSED**
-- **Resources Planned:**
-  - `+ aws_security_group.pharmaflow_sg` (Ports 80, 443 public, Port 22 restricted, Port 5432 private)
-  - `+ aws_instance.pharmaflow_server` (AMI: `ami-09d8c1e69d114dbf7`, `t3.micro`, encrypted gp3 volume, `user_data.sh` Docker provisioner)
-- **Plan Summary:** `Plan: 2 to add, 0 to change, 0 to destroy.`
-- **Guardrail Note:** `terraform apply` was intentionally withheld awaiting explicit administrator authorization.
+### 3.4 Execution Plan Analysis & Live Infrastructure Provisioning
+- **Command:** `terraform plan` & `terraform apply -auto-approve`
+- **Status:** **APPLY COMPLETED SUCCESSFULLY**
+- **Resources Added:** `aws_instance.pharmaflow_server` (1 added, 0 changed, 0 destroyed)
+- **Live AWS Infrastructure Output:**
+  - **AWS EC2 Instance ID:** `i-0c677638d7e3082e1`
+  - **EC2 Public IPv4:** `15.252.139.104`
+  - **EC2 Public DNS:** `ec2-15-252-139-104.ap-south-1.compute.amazonaws.com`
+  - **AWS Region:** `ap-south-1` (Mumbai)
+  - **Security Group ID:** `sg-0408387154c9a1dab` (`pharmaflow-sg`)
+  - **SSH Access:** Verified via TCP port 22 (`TcpTestSucceeded: True`)
+  - **Deployment Path:** `/opt/pharmaflow`
+  - **Convenience SSH Command:** `ssh -i pharmaflow-ec2-key.pem ubuntu@15.252.139.104`
