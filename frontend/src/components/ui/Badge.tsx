@@ -3,28 +3,28 @@ import { MovementType } from '../../types/movement';
 
 interface BadgeProps {
   children: React.ReactNode;
-  variant?: 'success' | 'danger' | 'warning' | 'info' | 'neutral' | 'purple';
+  variant?: 'success' | 'danger' | 'warning' | 'info' | 'neutral' | 'teal';
   size?: 'sm' | 'md';
 }
 
 export const Badge: React.FC<BadgeProps> = ({ children, variant = 'neutral', size = 'sm' }) => {
   const variantStyles = {
-    success: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
-    danger: 'bg-rose-500/15 text-rose-400 border-rose-500/30',
-    warning: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
-    info: 'bg-sky-500/15 text-sky-400 border-sky-500/30',
-    neutral: 'bg-slate-700/50 text-slate-300 border-slate-600/50',
-    purple: 'bg-purple-500/15 text-purple-400 border-purple-500/30',
+    success: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+    danger: 'bg-red-50 text-red-800 border-red-200',
+    warning: 'bg-amber-50 text-amber-800 border-amber-200',
+    info: 'bg-blue-50 text-blue-800 border-blue-200',
+    neutral: 'bg-slate-50 text-slate-700 border-slate-200',
+    teal: 'bg-teal-50 text-teal-800 border-teal-200',
   };
 
   const sizeStyles = {
-    sm: 'text-xs px-2.5 py-0.5 rounded-full',
-    md: 'text-sm px-3 py-1 rounded-lg',
+    sm: 'text-[11px] px-2 py-0.5 rounded font-medium',
+    md: 'text-xs px-2.5 py-1 rounded font-medium',
   };
 
   return (
     <span
-      className={`inline-flex items-center gap-1 font-medium border ${variantStyles[variant]} ${sizeStyles[size]}`}
+      className={`inline-flex items-center gap-1 border ${variantStyles[variant]} ${sizeStyles[size]}`}
     >
       {children}
     </span>
@@ -36,11 +36,11 @@ export const MovementBadge: React.FC<{ type: MovementType }> = ({ type }) => {
     case 'PURCHASE':
       return <Badge variant="success">PURCHASE</Badge>;
     case 'SALE':
-      return <Badge variant="info">SALE</Badge>;
+      return <Badge variant="teal">SALE</Badge>;
     case 'RETURN':
       return <Badge variant="warning">RETURN</Badge>;
     case 'ADJUSTMENT':
-      return <Badge variant="purple">ADJUSTMENT</Badge>;
+      return <Badge variant="neutral">ADJUSTMENT</Badge>;
     default:
       return <Badge variant="neutral">{type}</Badge>;
   }

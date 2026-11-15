@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { healthApi } from '../../api/healthApi';
-import { Activity, ExternalLink, RefreshCw } from 'lucide-react';
+import { ExternalLink, RefreshCw } from 'lucide-react';
 import { NavTab } from './Sidebar';
 
 interface HeaderProps {
@@ -19,57 +19,57 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, onRefresh }) => {
 
   const titles: Record<NavTab, { title: string; subtitle: string }> = {
     dashboard: {
-      title: 'Executive Inventory Dashboard',
-      subtitle: 'Real-time pharmacy metrics, stock valuation, and activity trends',
+      title: 'Pharmacy Inventory Workspace',
+      subtitle: 'Real-time stock valuation, critical alerts, and operational ledger',
     },
     medicines: {
-      title: 'Medicine Master Catalogue',
-      subtitle: 'Manage pharmaceutical products, SKU codes, categories and reorder thresholds',
+      title: 'Medicine Master Formulary',
+      subtitle: 'Pharmaceutical products, SKU codes, therapeutic categories, and reorder thresholds',
     },
     batches: {
       title: 'Batch Inventory Control',
-      subtitle: 'Track production lots, manufacturing dates, expiry dates and pricing',
+      subtitle: 'Production lot tracking, manufacturing dates, expiry dates, and pricing margins',
     },
     inventory: {
       title: 'Inventory Stock Levels',
       subtitle: 'Aggregated stock across all batches with low-stock deficit indicators',
     },
     movements: {
-      title: 'Stock Movements & Audit Operations',
-      subtitle: 'Execute Purchases, Sales, Returns and Adjustments with atomic integrity',
+      title: 'Stock Movements & Transactions',
+      subtitle: 'Dispensing, purchases, patient returns, and inventory reconciliation',
     },
     reports: {
-      title: 'Reports & Clinical Audit Trail',
-      subtitle: 'Exportable stock valuation, expiry stratification and transaction ledgers',
+      title: 'Clinical & Operational Reports',
+      subtitle: 'Exportable stock valuation, expiry stratification, and audit ledgers',
     },
     health: {
-      title: 'System Health & DevOps Observability',
-      subtitle: 'Live probes, database readiness status and infrastructure runtime metrics',
+      title: 'System Health & Infrastructure',
+      subtitle: 'Service probes, database connectivity, and runtime metrics',
     },
   };
 
   const current = titles[currentTab] || { title: 'PharmaFlow', subtitle: 'Platform' };
 
   return (
-    <header className="h-16 bg-slate-900/80 backdrop-blur-md border-b border-slate-800 px-8 flex items-center justify-between sticky top-0 z-30">
+    <header className="h-16 bg-white border-b border-slate-200 px-6 sm:px-8 flex items-center justify-between sticky top-0 z-30 shadow-subtle">
       <div>
-        <h2 className="text-base font-bold text-white tracking-tight">{current.title}</h2>
-        <p className="text-xs text-slate-400 hidden sm:block">{current.subtitle}</p>
+        <h2 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight">{current.title}</h2>
+        <p className="text-xs text-slate-500 hidden sm:block">{current.subtitle}</p>
       </div>
 
-      <div className="flex items-center gap-3">
-        {/* Backend Status Pill */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/80 border border-slate-700/60 text-xs">
+      <div className="flex items-center gap-2.5">
+        {/* Backend Status Indicator */}
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs">
           <span
             className={`w-2 h-2 rounded-full ${
               isSuccess
-                ? 'bg-emerald-400 animate-pulse'
+                ? 'bg-emerald-600'
                 : isError
-                ? 'bg-rose-500'
-                : 'bg-amber-400 animate-ping'
+                ? 'bg-red-600'
+                : 'bg-amber-500'
             }`}
           />
-          <span className="font-medium text-slate-300">
+          <span className="font-medium text-slate-700">
             {isSuccess ? 'API Online' : isError ? 'API Disconnected' : 'Connecting...'}
           </span>
           {health?.version && (
@@ -85,9 +85,9 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, onRefresh }) => {
           }}
           disabled={isFetching}
           title="Refresh view"
-          className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors disabled:opacity-50"
+          className="p-1.5 sm:p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 border border-slate-200 transition-colors disabled:opacity-50"
         >
-          <RefreshCw className={`w-4 h-4 ${isFetching ? 'animate-spin text-emerald-400' : ''}`} />
+          <RefreshCw className={`w-4 h-4 ${isFetching ? 'animate-spin text-teal-700' : ''}`} />
         </button>
 
         {/* Swagger Docs Link */}
@@ -95,10 +95,10 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, onRefresh }) => {
           href="/docs"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-300 hover:text-white text-xs font-semibold border border-slate-700/60 transition-colors"
+          className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium border border-slate-200 shadow-sm transition-colors"
         >
-          <span>OpenAPI Docs</span>
-          <ExternalLink className="w-3 h-3 text-slate-400" />
+          <span>API Docs</span>
+          <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
         </a>
       </div>
     </header>

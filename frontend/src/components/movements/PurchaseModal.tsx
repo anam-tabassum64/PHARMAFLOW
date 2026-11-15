@@ -7,7 +7,7 @@ import { extractErrorMessage } from '../../api/client';
 import { PurchaseInput } from '../../types/movement';
 import { useToast } from '../../context/ToastContext';
 import { Modal } from '../ui/Modal';
-import { PlusCircle, ShoppingCart } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react';
 
 interface PurchaseModalProps {
   isOpen: boolean;
@@ -123,19 +123,19 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Stock Purchase / Inward Receipt"
-      subtitle="Receive inventory shipments from pharmaceutical suppliers"
+      title="Stock Purchase / Inward Shipment"
+      subtitle="Receive and record pharmaceutical shipments into dispensary stock"
       maxWidth="lg"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {errorMsg && (
-          <div className="p-3 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs">
+          <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs font-medium">
             {errorMsg}
           </div>
         )}
 
         <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-1">
+          <label className="block text-xs font-semibold text-slate-700 mb-1">
             Pharmaceutical Product *
           </label>
           <select
@@ -146,7 +146,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
               setMedicineId(e.target.value);
               setSelectedBatchId('');
             }}
-            className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors"
+            className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
           >
             <option value="">-- Choose Medicine --</option>
             {medicines?.map((m) => (
@@ -158,43 +158,43 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
         </div>
 
         {/* Batch Selection Mode */}
-        <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 space-y-3">
+        <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-3">
           <div className="flex items-center justify-between text-xs">
-            <span className="font-semibold text-slate-300">Batch Destination:</span>
+            <span className="font-semibold text-slate-700">Batch Destination:</span>
             <div className="flex items-center gap-3">
-              <label className="flex items-center gap-1.5 cursor-pointer text-slate-300">
+              <label className="flex items-center gap-1.5 cursor-pointer text-slate-700 font-medium">
                 <input
                   type="radio"
                   name="batch_mode"
                   checked={!useNewBatch}
                   onChange={() => setUseNewBatch(false)}
-                  className="text-emerald-500 focus:ring-emerald-500"
+                  className="text-teal-700 focus:ring-teal-700"
                 />
-                Existing Batch
+                Existing Lot
               </label>
-              <label className="flex items-center gap-1.5 cursor-pointer text-slate-300">
+              <label className="flex items-center gap-1.5 cursor-pointer text-slate-700 font-medium">
                 <input
                   type="radio"
                   name="batch_mode"
                   checked={useNewBatch}
                   onChange={() => setUseNewBatch(true)}
-                  className="text-emerald-500 focus:ring-emerald-500"
+                  className="text-teal-700 focus:ring-teal-700"
                 />
-                Create New Batch
+                Create New Lot
               </label>
             </div>
           </div>
 
           {!useNewBatch ? (
             <div>
-              <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+              <label className="block text-[11px] font-semibold text-slate-600 mb-1">
                 Select Existing Batch *
               </label>
               <select
                 value={selectedBatchId}
                 disabled={!medicineId || purchaseMutation.isPending}
                 onChange={(e) => setSelectedBatchId(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-slate-850 border border-slate-700 text-xs text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
               >
                 <option value="">-- Select Existing Lot --</option>
                 {batches?.map((b) => (
@@ -204,8 +204,8 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
                 ))}
               </select>
               {medicineId && batches && batches.length === 0 && (
-                <p className="text-[11px] text-amber-400 mt-1">
-                  No existing batches found. Please select "Create New Batch".
+                <p className="text-[11px] text-amber-700 mt-1">
+                  No existing batches found for this product. Please select "Create New Lot".
                 </p>
               )}
             </div>
@@ -213,44 +213,44 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
             <div className="space-y-3 pt-1">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[11px] font-semibold text-slate-400 mb-1">
-                    New Batch Number *
+                  <label className="block text-[11px] font-semibold text-slate-600 mb-1">
+                    New Batch Lot Number *
                   </label>
                   <input
                     type="text"
                     placeholder="e.g. BTH-PO-09"
                     value={newBatchNumber}
                     onChange={(e) => setNewBatchNumber(e.target.value.toUpperCase())}
-                    className="w-full px-3 py-1.5 rounded-xl bg-slate-850 border border-slate-700 text-xs text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 font-mono focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700"
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                  <label className="block text-[11px] font-semibold text-slate-600 mb-1">
                     Expiry Date *
                   </label>
                   <input
                     type="date"
                     value={expDate}
                     onChange={(e) => setExpDate(e.target.value)}
-                    className="w-full px-3 py-1.5 rounded-xl bg-slate-850 border border-slate-700 text-xs text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 font-mono focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                  <label className="block text-[11px] font-semibold text-slate-600 mb-1">
                     Mfg Date
                   </label>
                   <input
                     type="date"
                     value={mfgDate}
                     onChange={(e) => setMfgDate(e.target.value)}
-                    className="w-full px-3 py-1.5 rounded-xl bg-slate-850 border border-slate-700 text-xs text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 font-mono focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700"
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                  <label className="block text-[11px] font-semibold text-slate-600 mb-1">
                     Cost Price ($)
                   </label>
                   <input
@@ -259,11 +259,11 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
                     min="0"
                     value={costPrice}
                     onChange={(e) => setCostPrice(parseFloat(e.target.value) || 0)}
-                    className="w-full px-3 py-1.5 rounded-xl bg-slate-850 border border-slate-700 text-xs text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 font-mono focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700"
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                  <label className="block text-[11px] font-semibold text-slate-600 mb-1">
                     Sell Price ($)
                   </label>
                   <input
@@ -272,7 +272,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
                     min="0"
                     value={sellPrice}
                     onChange={(e) => setSellPrice(parseFloat(e.target.value) || 0)}
-                    className="w-full px-3 py-1.5 rounded-xl bg-slate-850 border border-slate-700 text-xs text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 font-mono focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700"
                   />
                 </div>
               </div>
@@ -282,7 +282,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">
+            <label className="block text-xs font-semibold text-slate-700 mb-1">
               Quantity Received *
             </label>
             <input
@@ -292,12 +292,12 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
               disabled={purchaseMutation.isPending}
               value={quantity}
               onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
-              className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors"
+              className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 font-mono focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">
+            <label className="block text-xs font-semibold text-slate-700 mb-1">
               PO / Delivery Ref
             </label>
             <input
@@ -306,41 +306,41 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
               disabled={purchaseMutation.isPending}
               value={refNumber}
               onChange={(e) => setRefNumber(e.target.value.toUpperCase())}
-              className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors"
+              className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 font-mono placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-1">
-            Shipment / Supplier Notes
+          <label className="block text-xs font-semibold text-slate-700 mb-1">
+            Supplier & Inspection Notes
           </label>
           <input
             type="text"
-            placeholder="e.g. Delivered by cold chain logistics in good temperature"
+            placeholder="e.g. Delivered by cold-chain logistics in good condition"
             disabled={purchaseMutation.isPending}
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors"
+            className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
           />
         </div>
 
-        <div className="flex justify-end gap-3 pt-4 border-t border-slate-800">
+        <div className="flex justify-end gap-3 pt-4 border-t border-slate-200">
           <button
             type="button"
             onClick={onClose}
             disabled={purchaseMutation.isPending}
-            className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:bg-slate-800 transition-colors"
+            className="px-4 py-2 rounded-lg text-xs font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-colors"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={purchaseMutation.isPending}
-            className="px-5 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition-all shadow-lg shadow-emerald-900/30 disabled:opacity-50 flex items-center gap-1.5"
+            className="px-5 py-2 rounded-lg text-xs font-semibold bg-teal-700 hover:bg-teal-800 text-white shadow-sm transition-colors disabled:opacity-50 flex items-center gap-1.5"
           >
-            <ShoppingCart className="w-4 h-4" />
-            {purchaseMutation.isPending ? 'Committing...' : 'Commit Purchase'}
+            <ShoppingCart className="w-3.5 h-3.5" />
+            <span>{purchaseMutation.isPending ? 'Committing...' : 'Commit Purchase'}</span>
           </button>
         </div>
       </form>

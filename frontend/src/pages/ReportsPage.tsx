@@ -4,14 +4,11 @@ import { reportApi } from '../api/reportApi';
 import { TableSkeleton } from '../components/ui/LoadingSkeleton';
 import { Badge, MovementBadge } from '../components/ui/Badge';
 import {
-  BarChart3,
   Download,
   Boxes,
   Clock,
   ArrowLeftRight,
   ShieldAlert,
-  CheckCircle,
-  AlertTriangle,
 } from 'lucide-react';
 
 export const ReportsPage: React.FC = () => {
@@ -155,15 +152,15 @@ export const ReportsPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Top Header & Export Bar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 p-5 rounded-2xl bg-slate-850 border border-slate-800 shadow-xl">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 p-5 rounded-lg bg-white border border-slate-200/90 shadow-sm">
         {/* Report Selector Tabs */}
         <div className="flex items-center gap-2">
           <button
             onClick={() => setActiveReport('stock')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
               activeReport === 'stock'
-                ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-950/50'
-                : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-750'
+                ? 'bg-teal-700 text-white shadow-sm'
+                : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-300'
             }`}
           >
             <Boxes className="w-4 h-4" />
@@ -171,10 +168,10 @@ export const ReportsPage: React.FC = () => {
           </button>
           <button
             onClick={() => setActiveReport('expiry')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
               activeReport === 'expiry'
-                ? 'bg-amber-600 text-white shadow-lg shadow-amber-950/50'
-                : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-750'
+                ? 'bg-teal-700 text-white shadow-sm'
+                : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-300'
             }`}
           >
             <Clock className="w-4 h-4" />
@@ -182,10 +179,10 @@ export const ReportsPage: React.FC = () => {
           </button>
           <button
             onClick={() => setActiveReport('movements')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
               activeReport === 'movements'
-                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-950/50'
-                : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-750'
+                ? 'bg-teal-700 text-white shadow-sm'
+                : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-300'
             }`}
           >
             <ArrowLeftRight className="w-4 h-4" />
@@ -196,31 +193,38 @@ export const ReportsPage: React.FC = () => {
         {/* CSV Export Button */}
         <button
           onClick={handleExport}
-          className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white border border-slate-700 transition-all shadow"
+          className="flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 transition-colors shadow-sm"
         >
-          <Download className="w-4 h-4 text-emerald-400" />
+          <Download className="w-4 h-4 text-teal-700" />
           <span>Export CSV</span>
         </button>
       </div>
 
       {/* Report 1: Stock Valuation */}
       {activeReport === 'stock' && (
-        <div className="rounded-2xl bg-slate-850 border border-slate-800 shadow-xl overflow-hidden">
-          <div className="p-4 border-b border-slate-800 flex items-center justify-between">
-            <h3 className="text-sm font-bold text-white tracking-tight">
-              Formula Valuation & Stock Breakdown
-            </h3>
-            <span className="text-xs text-slate-400">
-              Total Monitored Entities: {stockReport?.length || 0}
+        <div className="rounded-lg bg-white border border-slate-200/90 shadow-sm overflow-hidden">
+          <div className="p-4 border-b border-slate-200 flex items-center justify-between">
+            <div>
+              <h3 className="text-sm font-bold text-slate-900 tracking-tight">
+                Formula Valuation & Inventory Breakdown
+              </h3>
+              <p className="text-xs text-slate-500">
+                Aggregated valuation calculated from physical batch purchase cost
+              </p>
+            </div>
+            <span className="text-xs text-slate-500">
+              Total Formularies: {stockReport?.length || 0}
             </span>
           </div>
 
           {isStockLoading ? (
-            <TableSkeleton rows={8} cols={6} />
+            <div className="p-4">
+              <TableSkeleton rows={8} cols={6} />
+            </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-900 text-slate-400 uppercase tracking-wider text-[11px] font-semibold border-b border-slate-800">
+                <thead className="bg-slate-50 text-slate-700 uppercase tracking-wider text-[11px] font-semibold border-b border-slate-200">
                   <tr>
                     <th className="py-3 px-4">Code</th>
                     <th className="py-3 px-4">Medicine Name</th>
@@ -230,25 +234,25 @@ export const ReportsPage: React.FC = () => {
                     <th className="py-3 px-4 text-right">Inventory Valuation ($)</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800 text-slate-300">
+                <tbody className="divide-y divide-slate-100 text-slate-700">
                   {stockReport?.map((m) => (
-                    <tr key={m.medicine_id} className="hover:bg-slate-800/40">
-                      <td className="py-3 px-4 font-mono font-medium text-emerald-400">
+                    <tr key={m.medicine_id} className="hover:bg-slate-50/70 transition-colors">
+                      <td className="py-3 px-4 font-mono font-medium text-teal-700">
                         {m.medicine_code}
                       </td>
-                      <td className="py-3 px-4 font-bold text-white">
+                      <td className="py-3 px-4 font-semibold text-slate-900">
                         {m.name}
-                        <span className="text-slate-400 font-normal block text-[11px] italic">
+                        <span className="text-slate-500 font-normal block text-[11px] italic">
                           {m.generic_name}
                         </span>
                       </td>
-                      <td className="py-3 px-4">{m.category}</td>
-                      <td className="py-3 px-4 text-center font-semibold">{m.batches.length}</td>
-                      <td className="py-3 px-4 text-right font-mono font-bold text-sm text-white">
+                      <td className="py-3 px-4 text-slate-700">{m.category}</td>
+                      <td className="py-3 px-4 text-center font-medium text-slate-800">{m.batches.length}</td>
+                      <td className="py-3 px-4 text-right font-mono font-bold text-xs text-slate-900">
                         {m.total_available_stock}{' '}
-                        <span className="text-[10px] text-slate-400 font-normal">{m.unit}</span>
+                        <span className="text-[10px] text-slate-500 font-normal">{m.unit}</span>
                       </td>
-                      <td className="py-3 px-4 text-right font-mono font-bold text-emerald-400">
+                      <td className="py-3 px-4 text-right font-mono font-bold text-slate-900">
                         ${Number(m.total_valuation).toFixed(2)}
                       </td>
                     </tr>
@@ -265,58 +269,58 @@ export const ReportsPage: React.FC = () => {
         <div className="space-y-6">
           {/* Expiry KPI Summary Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-            <div className="p-4 rounded-xl bg-rose-950/30 border border-rose-500/30">
-              <span className="text-[11px] font-semibold text-rose-300 uppercase block">
+            <div className="p-4 rounded-lg bg-red-50/60 border border-red-200">
+              <span className="text-[11px] font-semibold text-red-800 uppercase block">
                 Expired Batches
               </span>
-              <span className="text-2xl font-extrabold text-rose-400">
+              <span className="text-2xl font-bold text-red-700">
                 {expiryReport?.expired_batches.length || 0}
               </span>
-              <span className="text-[11px] text-slate-400 block mt-1">Sale forbidden</span>
+              <span className="text-[11px] text-red-600 block mt-1">Dispensing rejected</span>
             </div>
 
-            <div className="p-4 rounded-xl bg-amber-950/30 border border-amber-500/30">
-              <span className="text-[11px] font-semibold text-amber-300 uppercase block">
+            <div className="p-4 rounded-lg bg-amber-50/60 border border-amber-200">
+              <span className="text-[11px] font-semibold text-amber-800 uppercase block">
                 Expiring ≤ 30 Days
               </span>
-              <span className="text-2xl font-extrabold text-amber-400">
+              <span className="text-2xl font-bold text-amber-700">
                 {expiryReport?.expiring_in_30_days.length || 0}
               </span>
-              <span className="text-[11px] text-slate-400 block mt-1">Critical FEFO focus</span>
+              <span className="text-[11px] text-amber-600 block mt-1">Immediate FEFO focus</span>
             </div>
 
-            <div className="p-4 rounded-xl bg-sky-950/30 border border-sky-500/30">
-              <span className="text-[11px] font-semibold text-sky-300 uppercase block">
+            <div className="p-4 rounded-lg bg-sky-50/60 border border-sky-200">
+              <span className="text-[11px] font-semibold text-sky-800 uppercase block">
                 Expiring 31-90 Days
               </span>
-              <span className="text-2xl font-extrabold text-sky-400">
+              <span className="text-2xl font-bold text-sky-700">
                 {(expiryReport?.expiring_in_60_days.length || 0) +
                   (expiryReport?.expiring_in_90_days.length || 0)}
               </span>
-              <span className="text-[11px] text-slate-400 block mt-1">Medium shelf-life</span>
+              <span className="text-[11px] text-sky-600 block mt-1">Medium shelf-life</span>
             </div>
 
-            <div className="p-4 rounded-xl bg-emerald-950/30 border border-emerald-500/30">
-              <span className="text-[11px] font-semibold text-emerald-300 uppercase block">
+            <div className="p-4 rounded-lg bg-emerald-50/60 border border-emerald-200">
+              <span className="text-[11px] font-semibold text-emerald-800 uppercase block">
                 Safe Batches (&gt;90d)
               </span>
-              <span className="text-2xl font-extrabold text-emerald-400">
+              <span className="text-2xl font-bold text-emerald-700">
                 {expiryReport?.safe_batches.length || 0}
               </span>
-              <span className="text-[11px] text-slate-400 block mt-1">Stable inventory</span>
+              <span className="text-[11px] text-emerald-600 block mt-1">Stable inventory</span>
             </div>
           </div>
 
           {/* Expired Batches Table */}
           {expiryReport && expiryReport.expired_batches.length > 0 && (
-            <div className="rounded-2xl bg-slate-850 border border-rose-500/30 shadow-xl overflow-hidden">
-              <div className="p-3.5 bg-rose-950/40 border-b border-rose-500/30 flex items-center gap-2 text-rose-300 text-xs font-bold uppercase tracking-wider">
-                <ShieldAlert className="w-4 h-4 text-rose-400" />
-                Action Required: Expired Lots (Blocked from Sales & Returns)
+            <div className="rounded-lg bg-white border border-red-200 shadow-sm overflow-hidden">
+              <div className="p-3.5 bg-red-50 border-b border-red-200 flex items-center gap-2 text-red-800 text-xs font-bold uppercase tracking-wider">
+                <ShieldAlert className="w-4 h-4 text-red-600" />
+                Action Required: Expired Lots (Barred from Sales & Customer Returns)
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-slate-900 text-slate-400 border-b border-slate-800">
+                  <thead className="bg-slate-50 text-slate-700 border-b border-slate-200">
                     <tr>
                       <th className="py-2.5 px-4">Batch Lot #</th>
                       <th className="py-2.5 px-4">Medicine Item</th>
@@ -325,17 +329,17 @@ export const ReportsPage: React.FC = () => {
                       <th className="py-2.5 px-4 text-center">Status</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800 text-slate-300">
+                  <tbody className="divide-y divide-slate-100 text-slate-700">
                     {expiryReport.expired_batches.map((b) => (
-                      <tr key={b.id} className="hover:bg-slate-800/40">
-                        <td className="py-2.5 px-4 font-mono font-bold text-white">
+                      <tr key={b.id} className="hover:bg-slate-50/70 transition-colors">
+                        <td className="py-2.5 px-4 font-mono font-bold text-slate-900">
                           {b.batch_number}
                         </td>
-                        <td className="py-2.5 px-4 font-medium text-white">{b.medicine_name}</td>
-                        <td className="py-2.5 px-4 font-mono text-rose-400 font-bold">
+                        <td className="py-2.5 px-4 font-medium text-slate-900">{b.medicine_name}</td>
+                        <td className="py-2.5 px-4 font-mono text-red-700 font-semibold">
                           {b.expiry_date}
                         </td>
-                        <td className="py-2.5 px-4 text-right font-mono font-bold text-white">
+                        <td className="py-2.5 px-4 text-right font-mono font-bold text-slate-900">
                           {b.available_quantity}
                         </td>
                         <td className="py-2.5 px-4 text-center">
@@ -356,72 +360,79 @@ export const ReportsPage: React.FC = () => {
         <div className="space-y-6">
           {/* Movement Aggregation Metrics */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="p-4 rounded-xl bg-slate-850 border border-slate-800">
-              <span className="text-[11px] font-semibold text-slate-400 uppercase block">
+            <div className="p-4 rounded-lg bg-white border border-slate-200/90 shadow-sm">
+              <span className="text-[11px] font-semibold text-slate-500 uppercase block">
                 Total Purchases
               </span>
-              <span className="text-xl font-bold text-emerald-400">
+              <span className="text-xl font-bold text-slate-900">
                 {movementReport?.purchases_count || 0}
               </span>
-              <span className="text-[10px] text-slate-400 block">
+              <span className="text-[10px] text-slate-500 block">
                 {movementReport?.total_units_purchased || 0} units inward
               </span>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-850 border border-slate-800">
-              <span className="text-[11px] font-semibold text-slate-400 uppercase block">
+            <div className="p-4 rounded-lg bg-white border border-slate-200/90 shadow-sm">
+              <span className="text-[11px] font-semibold text-slate-500 uppercase block">
                 Total Sales
               </span>
-              <span className="text-xl font-bold text-sky-400">
+              <span className="text-xl font-bold text-slate-900">
                 {movementReport?.sales_count || 0}
               </span>
-              <span className="text-[10px] text-slate-400 block">
+              <span className="text-[10px] text-slate-500 block">
                 {movementReport?.total_units_sold || 0} units dispensed
               </span>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-850 border border-slate-800">
-              <span className="text-[11px] font-semibold text-slate-400 uppercase block">
+            <div className="p-4 rounded-lg bg-white border border-slate-200/90 shadow-sm">
+              <span className="text-[11px] font-semibold text-slate-500 uppercase block">
                 Customer Returns
               </span>
-              <span className="text-xl font-bold text-amber-400">
+              <span className="text-xl font-bold text-amber-700">
                 {movementReport?.returns_count || 0}
               </span>
-              <span className="text-[10px] text-slate-400 block">
+              <span className="text-[10px] text-slate-500 block">
                 {movementReport?.total_units_returned || 0} units restocked
               </span>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-850 border border-slate-800">
-              <span className="text-[11px] font-semibold text-slate-400 uppercase block">
+            <div className="p-4 rounded-lg bg-white border border-slate-200/90 shadow-sm">
+              <span className="text-[11px] font-semibold text-slate-500 uppercase block">
                 Manual Adjustments
               </span>
-              <span className="text-xl font-bold text-purple-400">
+              <span className="text-xl font-bold text-slate-900">
                 {movementReport?.adjustments_count || 0}
               </span>
-              <span className="text-[10px] text-slate-400 block">
+              <span className="text-[10px] text-slate-500 block">
                 Net: {movementReport?.net_units_adjusted || 0} units
               </span>
             </div>
           </div>
 
           {/* Audit Ledger Table */}
-          <div className="rounded-2xl bg-slate-850 border border-slate-800 shadow-xl overflow-hidden">
-            <div className="p-4 border-b border-slate-800 flex items-center justify-between">
-              <h3 className="text-sm font-bold text-white tracking-tight">
-                Historical Transaction Audit Ledger
-              </h3>
-              <span className="text-xs text-slate-400">
-                Logged Movements: {movementReport?.total_movements || 0}
+          <div className="rounded-lg bg-white border border-slate-200/90 shadow-sm overflow-hidden">
+            <div className="p-4 border-b border-slate-200 flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-bold text-slate-900 tracking-tight">
+                  Historical Transaction Audit Ledger
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Full immutable history of stock changes with audit notes
+                </p>
+              </div>
+              <span className="text-xs text-slate-500">
+                Total Logged: {movementReport?.total_movements || 0}
               </span>
             </div>
 
             {isMovementLoading ? (
-              <TableSkeleton rows={8} cols={6} />
+              <div className="p-4">
+                <TableSkeleton rows={8} cols={6} />
+              </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-slate-900 text-slate-400 uppercase tracking-wider text-[11px] font-semibold border-b border-slate-800">
+                  <thead className="bg-slate-50 text-slate-700 uppercase tracking-wider text-[11px] font-semibold border-b border-slate-200">
                     <tr>
                       <th className="py-3 px-4">Ref Number</th>
                       <th className="py-3 px-4">Date</th>
@@ -432,26 +443,26 @@ export const ReportsPage: React.FC = () => {
                       <th className="py-3 px-4">Notes</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800 text-slate-300">
+                  <tbody className="divide-y divide-slate-100 text-slate-700">
                     {movementReport?.recent_movements.map((m) => (
-                      <tr key={m.id} className="hover:bg-slate-800/40">
-                        <td className="py-3 px-4 font-mono font-bold text-white">
+                      <tr key={m.id} className="hover:bg-slate-50/70 transition-colors">
+                        <td className="py-3 px-4 font-mono font-medium text-slate-900">
                           {m.reference_number}
                         </td>
-                        <td className="py-3 px-4 font-mono text-slate-400 text-[11px]">
+                        <td className="py-3 px-4 font-mono text-slate-500 text-[11px]">
                           {new Date(m.created_at).toLocaleDateString()}
                         </td>
                         <td className="py-3 px-4">
                           <MovementBadge type={m.movement_type} />
                         </td>
-                        <td className="py-3 px-4 font-medium text-white">{m.medicine_name}</td>
-                        <td className="py-3 px-4 font-mono text-slate-300">{m.batch_number}</td>
+                        <td className="py-3 px-4 font-medium text-slate-900">{m.medicine_name}</td>
+                        <td className="py-3 px-4 font-mono text-slate-600">{m.batch_number}</td>
                         <td className="py-3 px-4 text-right font-mono font-bold">
-                          <span className={m.quantity > 0 ? 'text-emerald-400' : 'text-rose-400'}>
+                          <span className={m.quantity > 0 ? 'text-emerald-700' : 'text-red-700'}>
                             {m.quantity > 0 ? `+${m.quantity}` : m.quantity}
                           </span>
                         </td>
-                        <td className="py-3 px-4 text-slate-300 max-w-xs truncate">{m.notes}</td>
+                        <td className="py-3 px-4 text-slate-600 max-w-xs truncate">{m.notes}</td>
                       </tr>
                     ))}
                   </tbody>

@@ -16,11 +16,13 @@ export const Layout: React.FC<LayoutProps> = ({
   children,
 }) => {
   return (
-    <div className="flex min-h-screen bg-slate-950 text-slate-100">
+    <div className="flex min-h-screen bg-[#F5F7F9] text-slate-900 antialiased font-sans">
       <Sidebar currentTab={currentTab} onSelectTab={onSelectTab} />
       <div className="flex-1 flex flex-col min-w-0">
         <Header currentTab={currentTab} onRefresh={onRefresh} />
-        <main className="flex-1 p-8 overflow-y-auto max-w-7xl w-full mx-auto">{children}</main>
+        <main className="flex-1 p-6 md:p-8 overflow-y-auto max-w-7xl w-full mx-auto">
+          {children}
+        </main>
       </div>
     </div>
   );
