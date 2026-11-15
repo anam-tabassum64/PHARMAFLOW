@@ -143,13 +143,16 @@ jobs:
         continue-on-error: true
         if: steps.check_ec2.outputs.ec2_ready == 'true'
         run: |
+          echo "=== AWS Assumed Role Identity ==="
+          aws sts get-caller-identity
           RUNNER_IP=$(curl -s https://checkip.amazonaws.com)
           echo "runner_ip=$RUNNER_IP" >> $GITHUB_OUTPUT
+          echo "Authorizing Runner IP: $RUNNER_IP in sg-0408387154c9a1dab"
           aws ec2 authorize-security-group-ingress \
             --group-id sg-0408387154c9a1dab \
             --protocol tcp \
             --port 22 \
-            --cidr "${RUNNER_IP}/32" 2>/dev/null || echo "Ingress rule already active or permission managed externally"
+            --cidr "${RUNNER_IP}/32" || echo "Ingress authorization failed"
 
       - name: Execute Remote Zero-Downtime Deployment
         if: steps.check_ec2.outputs.ec2_ready == 'true'
