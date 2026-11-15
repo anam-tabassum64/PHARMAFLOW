@@ -148,11 +148,16 @@ jobs:
           RUNNER_IP=$(curl -s https://checkip.amazonaws.com)
           echo "runner_ip=$RUNNER_IP" >> $GITHUB_OUTPUT
           echo "Authorizing Runner IP: $RUNNER_IP in sg-0408387154c9a1dab"
-          aws ec2 authorize-security-group-ingress \
+          AUTH_OUT=$(aws ec2 authorize-security-group-ingress \
             --group-id sg-0408387154c9a1dab \
             --protocol tcp \
             --port 22 \
-            --cidr "${RUNNER_IP}/32" || echo "Ingress authorization failed"
+            --cidr "${RUNNER_IP}/32" 2>&1 || true)
+          echo "::notice title=SG_INGRESS_OUTPUT::$AUTH_OUT"
+          echo "### AWS Security Group Ingress Result" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "$AUTH_OUT" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
 
       - name: Execute Remote Zero-Downtime Deployment
         if: steps.check_ec2.outputs.ec2_ready == 'true'
@@ -169,6 +174,14 @@ jobs:
           echo "$EC2_SSH_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H "$EC2_HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
+
+          # Diagnostic SSH probe
+          SSH_TEST=$(ssh -v -o StrictHostKeyChecking=no -o ConnectTimeout=10 "$EC2_USER@$EC2_HOST" "echo SSH_CONNECTED" 2>&1 || true)
+          echo "::notice title=SSH_PROBE_OUTPUT::$SSH_TEST"
+          echo "### SSH Connectivity Test Result" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "$SSH_TEST" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
 
           # Docker authentication for GHCR on EC2 host
           ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 "$EC2_USER@$EC2_HOST" "echo '$GHCR_TOKEN' | docker login ghcr.io -u '$GHCR_USER' --password-stdin 2>/dev/null || true"
