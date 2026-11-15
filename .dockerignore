@@ -1,0 +1,10 @@
+.git
+.github
+node_modules
+*.db
+*.sqlite
+*.sqlite3
+.pytest_cache
+__pycache__
+.env
+.env.*

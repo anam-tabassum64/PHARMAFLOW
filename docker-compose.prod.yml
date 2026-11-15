@@ -1,0 +1,127 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: pharmaflow-db
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-pharma_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pharma_dev_secret_change_me}
+      POSTGRES_DB: ${POSTGRES_DB:-pharmaflow}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - pharmaflow-net
+
+  backend:
+    image: ghcr.io/anam-tabassum64/pharmaflow-backend:${IMAGE_TAG:-latest}
+    container_name: pharmaflow-backend
+    restart: always
+    environment:
+      - ENVIRONMENT=production
+      - LOG_LEVEL=INFO
+      - DATABASE_URL=postgresql+psycopg2://${POSTGRES_USER:-pharma_admin}:${POSTGRES_PASSWORD:-pharma_dev_secret_change_me}@db:5432/${POSTGRES_DB:-pharmaflow}
+    expose:
+      - "8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    networks:
+      - pharmaflow-net
+
+  frontend:
+    image: ghcr.io/anam-tabassum64/pharmaflow-frontend:${IMAGE_TAG:-latest}
+    container_name: pharmaflow-frontend
+    restart: always
+    expose:
+      - "8080"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - pharmaflow-net
+
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    container_name: pharmaflow-prometheus
+    restart: always
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.route-prefix=/prometheus"
+      - "--web.external-url=http://localhost/prometheus"
+    expose:
+      - "9090"
+    depends_on:
+      - backend
+    networks:
+      - pharmaflow-net
+
+  grafana:
+    image: grafana/grafana:11.2.0
+    container_name: pharmaflow-grafana
+    restart: always
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-pharmaflow_admin_2026}
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/grafana/
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/etc/grafana/dashboards:ro
+      - grafana_data:/var/lib/grafana
+    expose:
+      - "3000"
+    depends_on:
+      - prometheus
+    networks:
+      - pharmaflow-net
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: pharmaflow-nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - frontend
+      - backend
+      - prometheus
+      - grafana
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+    networks:
+      - pharmaflow-net
+
+volumes:
+  postgres_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+
+networks:
+  pharmaflow-net:
+    driver: bridge
