@@ -153,8 +153,8 @@ jobs:
             --protocol tcp \
             --port 22 \
             --cidr "${RUNNER_IP}/32" 2>&1 || true)
-          SG_ERR=$(echo "$AUTH_OUT" | tr '\n' ' ' | cut -c1-200)
-          echo "::error title=SG_INGRESS_SUMMARY::$SG_ERR"
+          SG_INFO=$(echo "$AUTH_OUT" | tr '\n' ' ' | cut -c1-200)
+          echo "::notice title=SG_INGRESS_STATUS::$SG_INFO"
           echo "### AWS Security Group Ingress Result" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           echo "$AUTH_OUT" >> $GITHUB_STEP_SUMMARY
@@ -178,8 +178,8 @@ jobs:
 
           # Diagnostic SSH probe
           SSH_TEST=$(ssh -v -o StrictHostKeyChecking=no -o ConnectTimeout=10 "$EC2_USER@$EC2_HOST" "echo SSH_CONNECTED" 2>&1 || true)
-          SSH_ERR=$(echo "$SSH_TEST" | tail -n 5 | tr '\n' ' ' | cut -c1-200)
-          echo "::error title=SSH_SUMMARY::$SSH_ERR"
+          SSH_INFO=$(echo "$SSH_TEST" | tail -n 5 | tr '\n' ' ' | cut -c1-200)
+          echo "::notice title=SSH_STATUS::$SSH_INFO"
           echo "### SSH Connectivity Test Result" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           echo "$SSH_TEST" >> $GITHUB_STEP_SUMMARY
