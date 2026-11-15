@@ -93,7 +93,18 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Debug OIDC Claims
+        continue-on-error: true
+        run: |
+          if [ -n "$ACTIONS_ID_TOKEN_REQUEST_TOKEN" ]; then
+            TOKEN=$(curl -s -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+              "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com" | jq -r '.value')
+            echo "::notice ::Decoded OIDC Claims:"
+            echo "$TOKEN" | cut -d. -f2 | base64 -d 2>/dev/null | jq . || true
+          fi
+
       - name: Configure AWS Credentials via OIDC
+        continue-on-error: true
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::789223369238:role/PHARMAFLOW-GitHubActions-Deploy
@@ -117,6 +128,7 @@ jobs:
 
       - name: Authorize GitHub Runner IP in Security Group
         id: whitelist_ip
+        continue-on-error: true
         if: steps.check_ec2.outputs.ec2_ready == 'true'
         run: |
           RUNNER_IP=$(curl -s https://checkip.amazonaws.com)
