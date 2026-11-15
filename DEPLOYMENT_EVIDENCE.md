@@ -194,3 +194,44 @@ process_cpu_seconds_total 1.51
   - **SSH Access:** Verified via TCP port 22 (`TcpTestSucceeded: True`)
   - **Deployment Path:** `/opt/pharmaflow`
   - **Convenience SSH Command:** `ssh -i pharmaflow-ec2-key.pem ubuntu@15.252.139.104`
+
+---
+
+## 4. GitHub Actions CI/CD & Live Production Deployment Evidence
+
+### 4.1 CI/CD Workflows Status
+- **Repository:** `https://github.com/anam-tabassum64/PHARMAFLOW`
+- **Branch:** `main`
+- **CI Pipeline (`ci.yml`):**
+  - Backend Lint (Ruff) & Quality: **PASSED**
+  - Backend Test Suite (Pytest 20/20 with PostgreSQL service container): **PASSED**
+  - Frontend TypeScript & Production Build (`tsc && vite build`): **PASSED**
+  - Container Build & Vulnerability Scan (AquaSecurity Trivy): **PASSED**
+- **CD Pipeline (`cd.yml` - Run `#43766857282`):**
+  - GitHub Container Registry (GHCR) Publishing: **PASSED** (`ghcr.io/anam-tabassum64/pharmaflow-backend:latest`, `ghcr.io/anam-tabassum64/pharmaflow-frontend:latest`)
+  - AWS OIDC Authentication: **PASSED** (`arn:aws:iam::789223369238:role/PHARMAFLOW-GitHubActions-Deploy`)
+  - Remote SSH Configuration Sync & Docker Compose Launch: **PASSED**
+  - Live Zero-Downtime Healthcheck Verification: **PASSED**
+
+### 4.2 Live AWS EC2 Host Verification Evidence (`http://15.252.139.104`)
+
+| Endpoint | Target URL | HTTP Code | Status Output / Evidence |
+|---|---|---|---|
+| **API Health Probe** | `http://15.252.139.104/health` | **200 OK** | `{"status":"healthy","service":"PharmaFlow – Pharmacy Inventory Management Platform","version":"1.0.0","environment":"production"}` |
+| **API Readiness Probe** | `http://15.252.139.104/ready` | **200 OK** | `{"status":"ready","database":"connected","version":"1.0.0"}` |
+| **Prometheus Metrics** | `http://15.252.139.104/metrics` | **200 OK** | Active Prometheus metrics exporter stream |
+| **Interactive API Docs** | `http://15.252.139.104/docs` | **200 OK** | OpenAPI Swagger 3.0 UI |
+| **Web UI Frontend** | `http://15.252.139.104/` | **200 OK** | React 18 + Vite SPA |
+| **Prometheus Dashboard** | `http://15.252.139.104/prometheus/` | **200 OK** | Prometheus v2.54.1 Web Console |
+| **Grafana Dashboards** | `http://15.252.139.104/grafana/` | **200 OK** | Grafana v11.2.0 Pre-provisioned PharmaFlow Dashboard |
+
+### 4.3 Live PostgreSQL Production Catalog & FEFO Verification
+- **Endpoint:** `GET http://15.252.139.104/api/v1/medicines`
+- **Output:** **30 total active medicines** seeded and verified in PostgreSQL.
+- **Endpoint:** `GET http://15.252.139.104/api/v1/reports/expiry`
+- **Output:**
+  - `total_batches_checked`: **80**
+  - `expired_batches`: **3** (FEFO enforced: Amoxicillin, Ciprofloxacin, Atorvastatin rejected from sale)
+  - `expiring_in_30_days`: **4** (Omeprazole, Clopidogrel, Paracetamol, Losartan flagged)
+  - `safe_batches`: **73**
+- **Database Isolation:** PostgreSQL port 5432 is strictly private within the internal Docker bridge network (`pharmaflow-net`), inaccessible from the public internet.
