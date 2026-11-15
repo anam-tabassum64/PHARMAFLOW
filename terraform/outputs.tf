@@ -15,7 +15,7 @@ output "instance_id" {
 
 output "security_group_id" {
   description = "Security Group ID"
-  value       = aws_security_group.pharmaflow_sg.id
+  value       = data.aws_security_group.pharmaflow_sg.id
 }
 
 output "deployment_info" {
