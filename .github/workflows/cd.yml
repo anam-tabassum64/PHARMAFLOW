@@ -1,0 +1,172 @@
+name: PHARMAFLOW CD Pipeline
+
+on:
+  workflow_run:
+    workflows: ["PHARMAFLOW CI Pipeline"]
+    types: [completed]
+    branches: [main]
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+
+jobs:
+  publish-images:
+    name: Build & Publish to GHCR
+    runs-on: ubuntu-latest
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'push' ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
+    outputs:
+      image_tag: ${{ steps.tag_calc.outputs.tag }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Determine Image Tags
+        id: tag_calc
+        run: |
+          if [ "${{ github.ref_type }}" = "tag" ]; then
+            TAG="${{ github.ref_name }}"
+          else
+            TAG="$(echo ${{ github.sha }} | cut -c1-7)"
+          fi
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "TAG=$TAG" >> $GITHUB_ENV
+
+      - name: Log in to GitHub Container Registry (GHCR)
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Lowercase Repository Owner
+        id: repo_owner
+        run: |
+          echo "OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+      - name: Build & Push Backend Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ env.OWNER }}/pharmaflow-backend:${{ env.TAG }}
+            ghcr.io/${{ env.OWNER }}/pharmaflow-backend:latest
+            ghcr.io/${{ env.OWNER }}/pharmaflow-backend:sha-${{ github.sha }}
+
+      - name: Build & Push Frontend Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ env.OWNER }}/pharmaflow-frontend:${{ env.TAG }}
+            ghcr.io/${{ env.OWNER }}/pharmaflow-frontend:latest
+            ghcr.io/${{ env.OWNER }}/pharmaflow-frontend:sha-${{ github.sha }}
+
+      - name: Record Immutable Image Digests
+        run: |
+          echo "### Container Images Published to GHCR" >> $GITHUB_STEP_SUMMARY
+          echo "- **Backend Image**: \`ghcr.io/${{ env.OWNER }}/pharmaflow-backend:${{ env.TAG }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Frontend Image**: \`ghcr.io/${{ env.OWNER }}/pharmaflow-frontend:${{ env.TAG }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Git Commit SHA**: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+
+  deploy-ec2:
+    name: Deploy to AWS EC2
+    needs: [publish-images]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::789223369238:role/PHARMAFLOW-GitHubActions-Deploy
+          aws-region: ap-south-1
+          audience: sts.amazonaws.com
+
+      - name: Check EC2 Deployment Readiness
+        id: check_ec2
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+        run: |
+          if [ -z "$EC2_HOST" ] || [ -z "$EC2_SSH_KEY" ]; then
+            echo "ec2_ready=false" >> $GITHUB_OUTPUT
+            echo "::notice ::EC2 host or SSH secret not yet configured. Skipping remote host deployment until EC2 instance is launched."
+          else
+            echo "ec2_ready=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Execute Remote Zero-Downtime Deployment
+        if: steps.check_ec2.outputs.ec2_ready == 'true'
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ${{ secrets.EC2_USER || 'ubuntu' }}
+          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+          IMAGE_TAG: ${{ needs.publish-images.outputs.image_tag }}
+        run: |
+          # Setup SSH
+          mkdir -p ~/.ssh
+          echo "$EC2_SSH_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H "$EC2_HOST" >> ~/.ssh/known_hosts
+
+          # Sync Compose, Nginx & Monitoring configuration to /opt/pharmaflow
+          ssh "$EC2_USER@$EC2_HOST" "mkdir -p /opt/pharmaflow/nginx /opt/pharmaflow/monitoring/prometheus /opt/pharmaflow/monitoring/grafana/provisioning/datasources /opt/pharmaflow/monitoring/grafana/provisioning/dashboards /opt/pharmaflow/monitoring/grafana/dashboards /opt/pharmaflow/scripts"
+          scp docker-compose.prod.yml "$EC2_USER@$EC2_HOST:/opt/pharmaflow/docker-compose.prod.yml"
+          scp nginx/nginx.conf "$EC2_USER@$EC2_HOST:/opt/pharmaflow/nginx/nginx.conf"
+          scp monitoring/prometheus/prometheus.yml "$EC2_USER@$EC2_HOST:/opt/pharmaflow/monitoring/prometheus/prometheus.yml"
+          scp monitoring/grafana/provisioning/datasources/datasource.yml "$EC2_USER@$EC2_HOST:/opt/pharmaflow/monitoring/grafana/provisioning/datasources/datasource.yml"
+          scp monitoring/grafana/provisioning/dashboards/dashboards.yml "$EC2_USER@$EC2_HOST:/opt/pharmaflow/monitoring/grafana/provisioning/dashboards/dashboards.yml"
+          scp monitoring/grafana/dashboards/pharmaflow_dashboard.json "$EC2_USER@$EC2_HOST:/opt/pharmaflow/monitoring/grafana/dashboards/pharmaflow_dashboard.json"
+          scp scripts/backup.sh scripts/restore.sh scripts/rollback.sh "$EC2_USER@$EC2_HOST:/opt/pharmaflow/scripts/"
+
+          # Deploy container stack with rollback verification
+          ssh "$EC2_USER@$EC2_HOST" "bash -s" << EOF
+            set -e
+            cd /opt/pharmaflow
+            chmod +x scripts/*.sh
+
+            echo "Recording deployment version: $IMAGE_TAG"
+            echo "$IMAGE_TAG" >> .deployment_history
+
+            echo "Pulling latest images from GHCR..."
+            export IMAGE_TAG="$IMAGE_TAG"
+            docker compose -f docker-compose.prod.yml pull
+
+            echo "Deploying updated services..."
+            docker compose -f docker-compose.prod.yml up -d --remove-orphans
+
+            echo "Verifying service health..."
+            RETRIES=12
+            until (curl -s -f http://localhost/health > /dev/null && curl -s -f http://localhost/ready > /dev/null) || [ \$RETRIES -eq 0 ]; do
+              echo "Waiting for health check... (\$RETRIES left)"
+              sleep 5
+              RETRIES=\$((RETRIES - 1))
+            done
+
+            if [ \$RETRIES -eq 0 ]; then
+              echo "ERROR: Healthcheck probe failed. Initiating automatic rollback!"
+              bash scripts/rollback.sh
+              exit 1
+            fi
+
+            echo "Deployment healthy and verified!"
+          EOF
