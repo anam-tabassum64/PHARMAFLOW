@@ -99,8 +99,20 @@ jobs:
           if [ -n "$ACTIONS_ID_TOKEN_REQUEST_TOKEN" ]; then
             TOKEN=$(curl -s -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
               "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com" | jq -r '.value')
-            echo "::notice ::Decoded OIDC Claims:"
-            echo "$TOKEN" | cut -d. -f2 | base64 -d 2>/dev/null | jq . || true
+            PAYLOAD=$(echo "$TOKEN" | cut -d. -f2 | base64 -d 2>/dev/null)
+            SUB=$(echo "$PAYLOAD" | jq -r '.sub')
+            AUD=$(echo "$PAYLOAD" | jq -r '.aud')
+            REPO=$(echo "$PAYLOAD" | jq -r '.repository')
+            echo "::notice title=OIDC_SUB::$SUB"
+            echo "::notice title=OIDC_AUD::$AUD"
+            echo "::notice title=OIDC_REPO::$REPO"
+            echo "### GitHub OIDC Token Inspection" >> $GITHUB_STEP_SUMMARY
+            echo "- **Subject (\`sub\`)**: \`$SUB\`" >> $GITHUB_STEP_SUMMARY
+            echo "- **Audience (\`aud\`)**: \`$AUD\`" >> $GITHUB_STEP_SUMMARY
+            echo "- **Repository**: \`$REPO\`" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            echo "$PAYLOAD" | jq . >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
           fi
 
       - name: Configure AWS Credentials via OIDC
@@ -156,20 +168,20 @@ jobs:
           ssh-keyscan -H "$EC2_HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
 
           # Docker authentication for GHCR on EC2 host
-          ssh -o StrictHostKeyChecking=no "$EC2_USER@$EC2_HOST" "echo '$GHCR_TOKEN' | docker login ghcr.io -u '$GHCR_USER' --password-stdin 2>/dev/null || true"
+          ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 "$EC2_USER@$EC2_HOST" "echo '$GHCR_TOKEN' | docker login ghcr.io -u '$GHCR_USER' --password-stdin 2>/dev/null || true"
 
           # Sync Compose, Nginx & Monitoring configuration to /opt/pharmaflow
-          ssh -o StrictHostKeyChecking=no "$EC2_USER@$EC2_HOST" "mkdir -p /opt/pharmaflow/nginx /opt/pharmaflow/monitoring/prometheus /opt/pharmaflow/monitoring/grafana/provisioning/datasources /opt/pharmaflow/monitoring/grafana/provisioning/dashboards /opt/pharmaflow/monitoring/grafana/dashboards /opt/pharmaflow/scripts"
-          scp -o StrictHostKeyChecking=no docker-compose.prod.yml "$EC2_USER@$EC2_HOST:/opt/pharmaflow/docker-compose.prod.yml"
-          scp -o StrictHostKeyChecking=no nginx/nginx.conf "$EC2_USER@$EC2_HOST:/opt/pharmaflow/nginx/nginx.conf"
-          scp -o StrictHostKeyChecking=no monitoring/prometheus/prometheus.yml "$EC2_USER@$EC2_HOST:/opt/pharmaflow/monitoring/prometheus/prometheus.yml"
-          scp -o StrictHostKeyChecking=no monitoring/grafana/provisioning/datasources/datasource.yml "$EC2_USER@$EC2_HOST:/opt/pharmaflow/monitoring/grafana/provisioning/datasources/datasource.yml"
-          scp -o StrictHostKeyChecking=no monitoring/grafana/provisioning/dashboards/dashboards.yml "$EC2_USER@$EC2_HOST:/opt/pharmaflow/monitoring/grafana/provisioning/dashboards/dashboards.yml"
-          scp -o StrictHostKeyChecking=no monitoring/grafana/dashboards/pharmaflow_dashboard.json "$EC2_USER@$EC2_HOST:/opt/pharmaflow/monitoring/grafana/dashboards/pharmaflow_dashboard.json"
-          scp -o StrictHostKeyChecking=no scripts/backup.sh scripts/restore.sh scripts/rollback.sh "$EC2_USER@$EC2_HOST:/opt/pharmaflow/scripts/"
+          ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 "$EC2_USER@$EC2_HOST" "mkdir -p /opt/pharmaflow/nginx /opt/pharmaflow/monitoring/prometheus /opt/pharmaflow/monitoring/grafana/provisioning/datasources /opt/pharmaflow/monitoring/grafana/provisioning/dashboards /opt/pharmaflow/monitoring/grafana/dashboards /opt/pharmaflow/scripts"
+          scp -o StrictHostKeyChecking=no -o ConnectTimeout=10 docker-compose.prod.yml "$EC2_USER@$EC2_HOST:/opt/pharmaflow/docker-compose.prod.yml"
+          scp -o StrictHostKeyChecking=no -o ConnectTimeout=10 nginx/nginx.conf "$EC2_USER@$EC2_HOST:/opt/pharmaflow/nginx/nginx.conf"
+          scp -o StrictHostKeyChecking=no -o ConnectTimeout=10 monitoring/prometheus/prometheus.yml "$EC2_USER@$EC2_HOST:/opt/pharmaflow/monitoring/prometheus/prometheus.yml"
+          scp -o StrictHostKeyChecking=no -o ConnectTimeout=10 monitoring/grafana/provisioning/datasources/datasource.yml "$EC2_USER@$EC2_HOST:/opt/pharmaflow/monitoring/grafana/provisioning/datasources/datasource.yml"
+          scp -o StrictHostKeyChecking=no -o ConnectTimeout=10 monitoring/grafana/provisioning/dashboards/dashboards.yml "$EC2_USER@$EC2_HOST:/opt/pharmaflow/monitoring/grafana/provisioning/dashboards/dashboards.yml"
+          scp -o StrictHostKeyChecking=no -o ConnectTimeout=10 monitoring/grafana/dashboards/pharmaflow_dashboard.json "$EC2_USER@$EC2_HOST:/opt/pharmaflow/monitoring/grafana/dashboards/pharmaflow_dashboard.json"
+          scp -o StrictHostKeyChecking=no -o ConnectTimeout=10 scripts/backup.sh scripts/restore.sh scripts/rollback.sh "$EC2_USER@$EC2_HOST:/opt/pharmaflow/scripts/"
 
           # Deploy container stack with rollback verification
-          ssh -o StrictHostKeyChecking=no "$EC2_USER@$EC2_HOST" "bash -s" << EOF
+          ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 "$EC2_USER@$EC2_HOST" "bash -s" << EOF
             set -e
             cd /opt/pharmaflow
             chmod +x scripts/*.sh
