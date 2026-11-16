@@ -213,6 +213,7 @@ jobs:
 
             echo "Deploying updated services..."
             docker compose -f docker-compose.prod.yml up -d --remove-orphans
+            docker compose -f docker-compose.prod.yml restart prometheus grafana || true
 
             echo "Verifying service health..."
             RETRIES=15
