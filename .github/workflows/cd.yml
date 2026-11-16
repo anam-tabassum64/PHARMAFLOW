@@ -217,7 +217,7 @@ jobs:
 
             echo "Verifying service health..."
             RETRIES=15
-            until (curl -s -f http://localhost/health > /dev/null && curl -s -f http://localhost/ready > /dev/null) || [ \$RETRIES -eq 0 ]; do
+            until (curl -s -f http://localhost/health > /dev/null && curl -s -f http://localhost/ready > /dev/null && curl -s -f http://localhost/ > /dev/null) || [ \$RETRIES -eq 0 ]; do
               echo "Waiting for health check... (\$RETRIES left)"
               sleep 5
               RETRIES=\$((RETRIES - 1))

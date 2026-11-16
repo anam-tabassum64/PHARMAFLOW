@@ -14,20 +14,12 @@ COPY . .
 RUN npm run build
 
 # =================================================================
-# Stage 2: Serve static files with unprivileged NGINX runtime
+# Stage 2: Serve static files with NGINX runtime
 # =================================================================
 FROM nginx:1.27-alpine
 
-# Configure directories and permissions for unprivileged user
-RUN touch /var/run/nginx.pid && \
-    chown -R nginx:nginx /var/run/nginx.pid /var/cache/nginx /var/log/nginx /etc/nginx/conf.d
-
 COPY --from=builder /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-RUN chown -R nginx:nginx /usr/share/nginx/html
-
-USER nginx
 
 EXPOSE 8080
 
