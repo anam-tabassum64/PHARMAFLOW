@@ -213,18 +213,22 @@ jobs:
 
             echo "Deploying updated services..."
             docker compose -f docker-compose.prod.yml up -d --remove-orphans
-            docker compose -f docker-compose.prod.yml restart prometheus grafana || true
+            docker compose -f docker-compose.prod.yml restart nginx prometheus grafana || true
 
             echo "Verifying service health..."
-            RETRIES=15
+            RETRIES=25
             until (curl -s -f http://localhost/health > /dev/null && curl -s -f http://localhost/ready > /dev/null && curl -s -f http://localhost/ > /dev/null) || [ \$RETRIES -eq 0 ]; do
               echo "Waiting for health check... (\$RETRIES left)"
+              curl -s -I http://localhost/ || true
               sleep 5
               RETRIES=\$((RETRIES - 1))
             done
 
             if [ \$RETRIES -eq 0 ]; then
-              echo "ERROR: Healthcheck probe failed. Initiating automatic rollback!"
+              echo "ERROR: Healthcheck probe failed. Inspecting container logs:"
+              docker compose -f docker-compose.prod.yml ps
+              docker compose -f docker-compose.prod.yml logs --tail=40 frontend nginx || true
+              echo "Initiating automatic rollback!"
               bash scripts/rollback.sh
               exit 1
             fi
