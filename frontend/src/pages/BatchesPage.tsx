@@ -44,13 +44,13 @@ export const BatchesPage: React.FC = () => {
         <div className="flex flex-1 items-center gap-3 max-w-xl">
           {/* Search Box */}
           <div className="relative flex-1">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-[#777C76] absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search by batch lot number (e.g. BTH-101)..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 shadow-sm transition-colors"
+              className="w-full pl-9 pr-4 py-2 rounded-xl bg-white border border-[#E6E5DD] text-xs text-[#252A27] placeholder-[#777C76] focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] shadow-subtle transition-colors"
             />
           </div>
 
@@ -59,7 +59,7 @@ export const BatchesPage: React.FC = () => {
             <select
               value={selectedMedicineId}
               onChange={(e) => setSelectedMedicineId(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 shadow-sm transition-colors"
+              className="w-full px-3 py-2 rounded-xl bg-white border border-[#E6E5DD] text-xs text-[#252A27] focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] shadow-subtle transition-colors"
             >
               <option value="">All Medicines</option>
               {medicines?.map((m) => (
@@ -74,7 +74,7 @@ export const BatchesPage: React.FC = () => {
         {/* Action Button */}
         <button
           onClick={() => setIsCreateOpen(true)}
-          className="flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold bg-teal-700 hover:bg-teal-800 text-white shadow-sm transition-colors"
+          className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-semibold bg-[#183D32] hover:bg-[#122E26] text-white shadow-subtle transition-all duration-150"
         >
           <Plus className="w-4 h-4" />
           <span>Register Batch</span>
@@ -82,9 +82,9 @@ export const BatchesPage: React.FC = () => {
       </div>
 
       {/* Main Batches Table Card */}
-      <div className="rounded-lg bg-white border border-slate-200/90 shadow-sm overflow-hidden">
+      <div className="rounded-xl bg-white border border-[#E6E5DD] shadow-subtle overflow-hidden">
         {isLoading ? (
-          <div className="p-4">
+          <div className="p-6">
             <TableSkeleton rows={8} cols={7} />
           </div>
         ) : isError ? (
@@ -106,72 +106,72 @@ export const BatchesPage: React.FC = () => {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-700 font-semibold border-b border-slate-200 uppercase tracking-wider text-[11px]">
+              <thead className="bg-[#F1F0E9] text-[#252A27] font-heading font-semibold border-b border-[#E6E5DD] uppercase tracking-wider text-[11px]">
                 <tr>
-                  <th className="py-3 px-4">Batch Lot #</th>
-                  <th className="py-3 px-4">Medicine Product</th>
-                  <th className="py-3 px-4">Mfg Date</th>
-                  <th className="py-3 px-4">Expiry Date</th>
-                  <th className="py-3 px-4 text-center">Shelf Status</th>
-                  <th className="py-3 px-4 text-right">Cost / Sell</th>
-                  <th className="py-3 px-4 text-right">Available Qty</th>
-                  <th className="py-3 px-4 text-right">Action</th>
+                  <th className="py-3.5 px-4">Batch Lot #</th>
+                  <th className="py-3.5 px-4">Medicine Product</th>
+                  <th className="py-3.5 px-4">Mfg Date</th>
+                  <th className="py-3.5 px-4">Expiry Date</th>
+                  <th className="py-3.5 px-4 text-center">Shelf Status</th>
+                  <th className="py-3.5 px-4 text-right">Cost / Sell</th>
+                  <th className="py-3.5 px-4 text-right">Available Qty</th>
+                  <th className="py-3.5 px-4 text-right">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 text-slate-700">
+              <tbody className="divide-y divide-[#E6E5DD]/60 text-[#252A27]">
                 {batches.map((b) => {
                   return (
-                    <tr key={b.id} className="hover:bg-slate-50/70 transition-colors">
-                      <td className="py-3 px-4 font-mono font-bold text-slate-900">
+                    <tr key={b.id} className="hover:bg-[#F8F7F2]/80 transition-colors">
+                      <td className="py-3.5 px-4 font-mono font-bold text-[#183D32]">
                         {b.batch_number}
                       </td>
-                      <td className="py-3 px-4">
-                        <span className="font-semibold text-slate-900 block">
+                      <td className="py-3.5 px-4">
+                        <span className="font-semibold text-[#252A27] block">
                           {b.medicine_name || 'N/A'}
                         </span>
                         {b.medicine_code && (
-                          <span className="text-[10px] text-teal-700 font-mono">
+                          <span className="text-[10px] text-[#777C76] font-mono">
                             {b.medicine_code}
                           </span>
                         )}
                       </td>
-                      <td className="py-3 px-4 text-slate-500 font-mono text-[11px]">
+                      <td className="py-3.5 px-4 text-[#777C76] font-mono text-[11px]">
                         {b.manufacturing_date}
                       </td>
-                      <td className="py-3 px-4 font-mono text-[11px] font-medium text-slate-800">
+                      <td className="py-3.5 px-4 font-mono text-[11px] font-medium text-[#252A27]">
                         {b.expiry_date}
                       </td>
-                      <td className="py-3 px-4 text-center">
+                      <td className="py-3.5 px-4 text-center">
                         {b.is_expired ? (
                           <Badge variant="danger">Expired</Badge>
                         ) : b.days_to_expiry <= 30 ? (
                           <Badge variant="warning">{b.days_to_expiry}d left</Badge>
                         ) : b.days_to_expiry <= 90 ? (
-                          <Badge variant="info">{b.days_to_expiry}d left</Badge>
+                          <Badge variant="neutral">{b.days_to_expiry}d left</Badge>
                         ) : (
                           <Badge variant="success">Safe</Badge>
                         )}
                       </td>
-                      <td className="py-3 px-4 text-right font-mono text-[11px]">
-                        <span className="text-slate-500">${Number(b.purchase_price).toFixed(2)}</span>
-                        <span className="text-slate-400 mx-1">/</span>
-                        <span className="text-slate-900 font-semibold">
+                      <td className="py-3.5 px-4 text-right font-mono text-[11px]">
+                        <span className="text-[#777C76]">${Number(b.purchase_price).toFixed(2)}</span>
+                        <span className="text-[#A8B8A2] mx-1">/</span>
+                        <span className="text-[#252A27] font-semibold">
                           ${Number(b.selling_price).toFixed(2)}
                         </span>
                       </td>
-                      <td className="py-3 px-4 text-right">
-                        <span className="font-mono font-bold text-xs text-slate-900">
+                      <td className="py-3.5 px-4 text-right">
+                        <span className="font-mono font-bold text-xs text-[#252A27]">
                           {b.available_quantity}
                         </span>
-                        <span className="text-[10px] text-slate-500 block font-normal">
+                        <span className="text-[10px] text-[#777C76] block font-normal">
                           of {b.initial_quantity} init
                         </span>
                       </td>
-                      <td className="py-3 px-4 text-right">
+                      <td className="py-3.5 px-4 text-right">
                         <button
                           onClick={() => setBatchToEdit(b)}
                           title="Update Pricing"
-                          className="p-1.5 rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors inline-flex items-center gap-1"
+                          className="p-1.5 rounded-lg text-[#777C76] hover:text-[#183D32] hover:bg-[#F1F0E9] transition-colors inline-flex items-center gap-1.5"
                         >
                           <Edit2 className="w-3.5 h-3.5" />
                           <span className="text-[11px] font-medium">Pricing</span>
@@ -199,3 +199,4 @@ export const BatchesPage: React.FC = () => {
     </div>
   );
 };
+export default BatchesPage;

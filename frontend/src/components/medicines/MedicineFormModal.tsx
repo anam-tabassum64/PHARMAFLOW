@@ -153,14 +153,14 @@ export const MedicineFormModal: React.FC<MedicineFormModalProps> = ({
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {formError && (
-          <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs font-medium">
+          <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium">
             {formError}
           </div>
         )}
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
               Medicine SKU Code *
             </label>
             <input
@@ -170,12 +170,12 @@ export const MedicineFormModal: React.FC<MedicineFormModalProps> = ({
               placeholder="e.g. MED-201"
               value={formData.medicine_code}
               onChange={(e) => setFormData({ ...formData, medicine_code: e.target.value.toUpperCase() })}
-              className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 font-mono transition-colors"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] placeholder-[#777C76] focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] font-mono transition-colors"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
               Commercial / Brand Name *
             </label>
             <input
@@ -185,14 +185,14 @@ export const MedicineFormModal: React.FC<MedicineFormModalProps> = ({
               placeholder="e.g. Amoxicillin 500mg"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] placeholder-[#777C76] focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] transition-colors"
             />
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
               Generic / Chemical Formula *
             </label>
             <input
@@ -202,12 +202,12 @@ export const MedicineFormModal: React.FC<MedicineFormModalProps> = ({
               placeholder="e.g. Amoxicillin Trihydrate"
               value={formData.generic_name}
               onChange={(e) => setFormData({ ...formData, generic_name: e.target.value })}
-              className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] placeholder-[#777C76] focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] transition-colors"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
               Manufacturer *
             </label>
             <input
@@ -217,21 +217,21 @@ export const MedicineFormModal: React.FC<MedicineFormModalProps> = ({
               placeholder="e.g. GlaxoSmithKline"
               value={formData.manufacturer}
               onChange={(e) => setFormData({ ...formData, manufacturer: e.target.value })}
-              className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] placeholder-[#777C76] focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] transition-colors"
             />
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-3">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
               Category
             </label>
             <select
               value={formData.category}
               disabled={isSubmitting}
               onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-              className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] transition-colors"
             >
               {categories.map((c) => (
                 <option key={c} value={c}>
@@ -242,14 +242,14 @@ export const MedicineFormModal: React.FC<MedicineFormModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
               Dispensing Unit
             </label>
             <select
               value={formData.unit}
               disabled={isSubmitting}
               onChange={(e) => setFormData({ ...formData, unit: e.target.value })}
-              className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] transition-colors"
             >
               {units.map((u) => (
                 <option key={u} value={u}>
@@ -260,7 +260,7 @@ export const MedicineFormModal: React.FC<MedicineFormModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
               Reorder Level
             </label>
             <input
@@ -269,13 +269,13 @@ export const MedicineFormModal: React.FC<MedicineFormModalProps> = ({
               disabled={isSubmitting}
               value={formData.reorder_level}
               onChange={(e) => setFormData({ ...formData, reorder_level: parseInt(e.target.value) || 0 })}
-              className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 font-mono transition-colors"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] font-mono transition-colors"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">
+          <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
             Clinical Notes & Storage Specifications
           </label>
           <textarea
@@ -284,7 +284,7 @@ export const MedicineFormModal: React.FC<MedicineFormModalProps> = ({
             placeholder="Indications, storage requirements (e.g. Keep refrigerated at 2-8°C)..."
             value={formData.description || ''}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors resize-none"
+            className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] placeholder-[#777C76] focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] transition-colors resize-none"
           />
         </div>
 
@@ -295,26 +295,26 @@ export const MedicineFormModal: React.FC<MedicineFormModalProps> = ({
             disabled={isSubmitting}
             checked={formData.is_active}
             onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
-            className="w-4 h-4 rounded text-teal-700 bg-white border-slate-300 focus:ring-teal-700"
+            className="w-4 h-4 rounded text-[#183D32] bg-white border-[#E6E5DD] focus:ring-[#183D32]"
           />
-          <label htmlFor="is_active" className="text-xs text-slate-700 select-none cursor-pointer">
+          <label htmlFor="is_active" className="text-xs text-[#252A27] select-none cursor-pointer">
             Active in formulary (Available for stock movements and dispensing)
           </label>
         </div>
 
-        <div className="flex justify-end gap-3 pt-4 border-t border-slate-200">
+        <div className="flex justify-end gap-3 pt-4 border-t border-[#E6E5DD]">
           <button
             type="button"
             onClick={onClose}
             disabled={isSubmitting}
-            className="px-4 py-2 rounded-lg text-xs font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-colors"
+            className="px-4 py-2.5 rounded-xl text-xs font-medium text-[#252A27] bg-white border border-[#E6E5DD] hover:bg-[#F8F7F2] shadow-subtle transition-colors"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="px-5 py-2 rounded-lg text-xs font-semibold bg-teal-700 hover:bg-teal-800 text-white shadow-sm transition-colors disabled:opacity-50"
+            className="px-5 py-2.5 rounded-xl text-xs font-semibold bg-[#183D32] hover:bg-[#122E26] text-white shadow-subtle transition-all duration-150 disabled:opacity-50"
           >
             {isSubmitting ? 'Saving...' : medicineToEdit ? 'Save Changes' : 'Register Medicine'}
           </button>
@@ -323,3 +323,4 @@ export const MedicineFormModal: React.FC<MedicineFormModalProps> = ({
     </Modal>
   );
 };
+export default MedicineFormModal;

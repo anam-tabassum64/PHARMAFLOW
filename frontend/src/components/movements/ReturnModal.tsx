@@ -82,23 +82,23 @@ export const ReturnModal: React.FC<ReturnModalProps> = ({ isOpen, onClose }) => 
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {errorMsg && (
-          <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs font-medium">
+          <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium">
             {errorMsg}
           </div>
         )}
 
         {/* Regulatory Policy Notice */}
-        <div className="p-3.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-xs flex items-start gap-2.5">
-          <ShieldAlert className="w-5 h-5 flex-shrink-0 mt-0.5 text-amber-600" />
+        <div className="p-4 rounded-xl bg-amber-50/70 border border-amber-200 text-amber-800 text-xs flex items-start gap-3">
+          <ShieldAlert className="w-5 h-5 shrink-0 mt-0.5 text-amber-600" />
           <div className="leading-relaxed">
-            <strong className="block font-semibold">Standard Return Policy:</strong>
+            <strong className="block font-heading font-semibold">Standard Return Policy:</strong>
             Returned stock is strictly checked against batch expiry date. Expired medicines will be
             rejected by the system and cannot be placed back into active saleable inventory.
           </div>
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">
+          <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
             Target Batch Lot *
           </label>
           <select
@@ -106,7 +106,7 @@ export const ReturnModal: React.FC<ReturnModalProps> = ({ isOpen, onClose }) => 
             disabled={returnMutation.isPending}
             value={batchId}
             onChange={(e) => setBatchId(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
+            className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] transition-colors"
           >
             <option value="">-- Choose Batch Lot --</option>
             {batches?.map((b) => (
@@ -118,14 +118,14 @@ export const ReturnModal: React.FC<ReturnModalProps> = ({ isOpen, onClose }) => 
         </div>
 
         {selectedBatch?.is_expired && (
-          <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs font-medium">
+          <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium">
             Warning: Selected batch is expired ({selectedBatch.expiry_date}). Submission will be rejected by backend compliance policy.
           </div>
         )}
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
               Quantity to Return *
             </label>
             <input
@@ -135,12 +135,12 @@ export const ReturnModal: React.FC<ReturnModalProps> = ({ isOpen, onClose }) => 
               disabled={returnMutation.isPending}
               value={quantity}
               onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
-              className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 font-mono focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] font-mono focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] transition-colors"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
               Return RMA Reference
             </label>
             <input
@@ -149,13 +149,13 @@ export const ReturnModal: React.FC<ReturnModalProps> = ({ isOpen, onClose }) => 
               disabled={returnMutation.isPending}
               value={refNumber}
               onChange={(e) => setRefNumber(e.target.value.toUpperCase())}
-              className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 font-mono placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] font-mono placeholder-[#777C76] focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] transition-colors"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">
+          <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
             Reason for Return
           </label>
           <input
@@ -164,23 +164,23 @@ export const ReturnModal: React.FC<ReturnModalProps> = ({ isOpen, onClose }) => 
             disabled={returnMutation.isPending}
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
+            className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] placeholder-[#777C76] focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] transition-colors"
           />
         </div>
 
-        <div className="flex justify-end gap-3 pt-4 border-t border-slate-200">
+        <div className="flex justify-end gap-3 pt-4 border-t border-[#E6E5DD]">
           <button
             type="button"
             onClick={onClose}
             disabled={returnMutation.isPending}
-            className="px-4 py-2 rounded-lg text-xs font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-colors"
+            className="px-4 py-2.5 rounded-xl text-xs font-medium text-[#252A27] bg-white border border-[#E6E5DD] hover:bg-[#F8F7F2] shadow-subtle transition-colors"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={returnMutation.isPending || !batchId}
-            className="px-5 py-2 rounded-lg text-xs font-semibold bg-amber-600 hover:bg-amber-700 text-white shadow-sm transition-colors disabled:opacity-50 flex items-center gap-1.5"
+            className="px-5 py-2.5 rounded-xl text-xs font-semibold bg-amber-700 hover:bg-amber-800 text-white shadow-subtle transition-all duration-150 disabled:opacity-50 flex items-center gap-1.5"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>{returnMutation.isPending ? 'Processing...' : 'Process Return'}</span>
@@ -190,3 +190,4 @@ export const ReturnModal: React.FC<ReturnModalProps> = ({ isOpen, onClose }) => 
     </Modal>
   );
 };
+export default ReturnModal;

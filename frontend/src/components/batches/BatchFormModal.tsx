@@ -94,13 +94,13 @@ export const BatchFormModal: React.FC<BatchFormModalProps> = ({
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {formError && (
-          <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs font-medium">
+          <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium">
             {formError}
           </div>
         )}
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">
+          <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
             Target Medicine *
           </label>
           <select
@@ -108,7 +108,7 @@ export const BatchFormModal: React.FC<BatchFormModalProps> = ({
             disabled={createBatchMutation.isPending || !!preselectedMedicineId}
             value={formData.medicine_id}
             onChange={(e) => setFormData({ ...formData, medicine_id: e.target.value })}
-            className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
+            className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] transition-colors"
           >
             <option value="">-- Select Pharmaceutical Product --</option>
             {medicines?.map((m) => (
@@ -120,7 +120,7 @@ export const BatchFormModal: React.FC<BatchFormModalProps> = ({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">
+          <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
             Batch Lot Number *
           </label>
           <input
@@ -130,13 +130,13 @@ export const BatchFormModal: React.FC<BatchFormModalProps> = ({
             placeholder="e.g. BTH-AMX-04"
             value={formData.batch_number}
             onChange={(e) => setFormData({ ...formData, batch_number: e.target.value.toUpperCase() })}
-            className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 placeholder-slate-400 font-mono focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
+            className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] placeholder-[#777C76] font-mono focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] transition-colors"
           />
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
               Manufacturing Date *
             </label>
             <input
@@ -145,12 +145,12 @@ export const BatchFormModal: React.FC<BatchFormModalProps> = ({
               disabled={createBatchMutation.isPending}
               value={formData.manufacturing_date}
               onChange={(e) => setFormData({ ...formData, manufacturing_date: e.target.value })}
-              className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 font-mono focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] font-mono focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] transition-colors"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
               Expiry Date *
             </label>
             <input
@@ -159,14 +159,14 @@ export const BatchFormModal: React.FC<BatchFormModalProps> = ({
               disabled={createBatchMutation.isPending}
               value={formData.expiry_date}
               onChange={(e) => setFormData({ ...formData, expiry_date: e.target.value })}
-              className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 font-mono focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] font-mono focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] transition-colors"
             />
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-3">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
               Purchase Cost ($)
             </label>
             <input
@@ -177,12 +177,12 @@ export const BatchFormModal: React.FC<BatchFormModalProps> = ({
               disabled={createBatchMutation.isPending}
               value={formData.purchase_price}
               onChange={(e) => setFormData({ ...formData, purchase_price: parseFloat(e.target.value) || 0 })}
-              className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 font-mono focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] font-mono focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] transition-colors"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
               Selling Price ($)
             </label>
             <input
@@ -193,12 +193,12 @@ export const BatchFormModal: React.FC<BatchFormModalProps> = ({
               disabled={createBatchMutation.isPending}
               value={formData.selling_price}
               onChange={(e) => setFormData({ ...formData, selling_price: parseFloat(e.target.value) || 0 })}
-              className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 font-mono focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] font-mono focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] transition-colors"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
               Initial Quantity *
             </label>
             <input
@@ -208,24 +208,24 @@ export const BatchFormModal: React.FC<BatchFormModalProps> = ({
               disabled={createBatchMutation.isPending}
               value={formData.initial_quantity}
               onChange={(e) => setFormData({ ...formData, initial_quantity: parseInt(e.target.value) || 1 })}
-              className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 font-mono focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] font-mono focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] transition-colors"
             />
           </div>
         </div>
 
-        <div className="flex justify-end gap-3 pt-4 border-t border-slate-200">
+        <div className="flex justify-end gap-3 pt-4 border-t border-[#E6E5DD]">
           <button
             type="button"
             onClick={onClose}
             disabled={createBatchMutation.isPending}
-            className="px-4 py-2 rounded-lg text-xs font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-colors"
+            className="px-4 py-2.5 rounded-xl text-xs font-medium text-[#252A27] bg-white border border-[#E6E5DD] hover:bg-[#F8F7F2] shadow-subtle transition-colors"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={createBatchMutation.isPending}
-            className="px-5 py-2 rounded-lg text-xs font-semibold bg-teal-700 hover:bg-teal-800 text-white shadow-sm transition-colors disabled:opacity-50"
+            className="px-5 py-2.5 rounded-xl text-xs font-semibold bg-[#183D32] hover:bg-[#122E26] text-white shadow-subtle transition-all duration-150 disabled:opacity-50"
           >
             {createBatchMutation.isPending ? 'Registering...' : 'Register Batch'}
           </button>
@@ -234,3 +234,4 @@ export const BatchFormModal: React.FC<BatchFormModalProps> = ({
     </Modal>
   );
 };
+export default BatchFormModal;

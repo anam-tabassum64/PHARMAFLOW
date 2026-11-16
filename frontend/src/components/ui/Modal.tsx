@@ -16,7 +16,7 @@ export const Modal: React.FC<ModalProps> = ({
   title,
   subtitle,
   children,
-  maxWidth = 'lg',
+  maxWidth = 'md',
 }) => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -30,7 +30,7 @@ export const Modal: React.FC<ModalProps> = ({
 
   if (!isOpen) return null;
 
-  const maxWidthClasses = {
+  const maxWidthStyles = {
     sm: 'max-w-sm',
     md: 'max-w-md',
     lg: 'max-w-lg',
@@ -39,34 +39,34 @@ export const Modal: React.FC<ModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto" role="dialog" aria-modal="true">
-      <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
-        {/* Clean Backdrop */}
-        <div
-          className="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] transition-opacity"
-          onClick={onClose}
-        />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#252A27]/40 backdrop-blur-sm">
+      {/* Click outside to close */}
+      <div className="fixed inset-0" onClick={onClose} />
 
-        {/* Modal Dialog */}
-        <div
-          className={`relative transform overflow-hidden rounded-lg bg-white border border-slate-200 p-6 text-left shadow-modal transition-all sm:my-8 w-full ${maxWidthClasses[maxWidth]}`}
-        >
-          <div className="flex items-center justify-between pb-3.5 border-b border-slate-200">
-            <div>
-              <h3 className="text-base font-semibold text-slate-900 tracking-tight">{title}</h3>
-              {subtitle && <p className="text-xs text-slate-500 mt-0.5">{subtitle}</p>}
-            </div>
-            <button
-              onClick={onClose}
-              className="p-1 rounded text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
-              aria-label="Close modal"
-            >
-              <X className="w-5 h-5" />
-            </button>
+      {/* Modal Dialog Card */}
+      <div
+        className={`relative w-full ${maxWidthStyles[maxWidth]} bg-white rounded-2xl border border-[#E6E5DD] shadow-modal overflow-hidden z-10 animate-in fade-in zoom-in-95 duration-150`}
+      >
+        {/* Header */}
+        <div className="px-6 py-4 border-b border-[#E6E5DD] bg-[#F8F7F2] flex items-start justify-between gap-4">
+          <div>
+            <h3 className="text-base font-heading font-extrabold text-[#183D32] tracking-tight">
+              {title}
+            </h3>
+            {subtitle && (
+              <p className="text-xs text-[#777C76] mt-0.5 leading-normal">{subtitle}</p>
+            )}
           </div>
-
-          <div className="mt-4">{children}</div>
+          <button
+            onClick={onClose}
+            className="p-1 rounded-lg text-[#777C76] hover:text-[#252A27] hover:bg-[#E6E5DD] transition-colors"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
+
+        {/* Modal Content */}
+        <div className="p-6 max-h-[85vh] overflow-y-auto">{children}</div>
       </div>
     </div>
   );

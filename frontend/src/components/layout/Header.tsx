@@ -1,15 +1,22 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { healthApi } from '../../api/healthApi';
-import { ExternalLink, RefreshCw } from 'lucide-react';
+import { ExternalLink, RefreshCw, Menu, ShieldCheck } from 'lucide-react';
 import { NavTab } from './Sidebar';
 
 interface HeaderProps {
   currentTab: NavTab;
   onRefresh?: () => void;
+  onToggleMobileMenu?: () => void;
+  currentUser?: { name: string; email: string; role: string } | null;
 }
 
-export const Header: React.FC<HeaderProps> = ({ currentTab, onRefresh }) => {
+export const Header: React.FC<HeaderProps> = ({
+  currentTab,
+  onRefresh,
+  onToggleMobileMenu,
+  currentUser,
+}) => {
   const { data: health, isSuccess, isError, isFetching, refetch } = useQuery({
     queryKey: ['system-health-badge'],
     queryFn: healthApi.getHealth,
@@ -17,67 +24,89 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, onRefresh }) => {
     retry: 1,
   });
 
-  const titles: Record<NavTab, { title: string; subtitle: string }> = {
+  const tabMetadata: Record<NavTab, { title: string; category: string }> = {
     dashboard: {
-      title: 'Pharmacy Inventory Workspace',
-      subtitle: 'Real-time stock valuation, critical alerts, and operational ledger',
+      title: 'Pharmacy Operations Workspace',
+      category: 'Operations',
     },
     medicines: {
       title: 'Medicine Master Formulary',
-      subtitle: 'Pharmaceutical products, SKU codes, therapeutic categories, and reorder thresholds',
+      category: 'Operations',
     },
     batches: {
       title: 'Batch Inventory Control',
-      subtitle: 'Production lot tracking, manufacturing dates, expiry dates, and pricing margins',
+      category: 'Operations',
     },
     inventory: {
-      title: 'Inventory Stock Levels',
-      subtitle: 'Aggregated stock across all batches with low-stock deficit indicators',
+      title: 'Inventory Stock Levels & Deficits',
+      category: 'Operations',
     },
     movements: {
-      title: 'Stock Movements & Transactions',
-      subtitle: 'Dispensing, purchases, patient returns, and inventory reconciliation',
+      title: 'Stock Movements & Audit Transactions',
+      category: 'Operations',
+    },
+    suppliers: {
+      title: 'Supplier & Manufacturer Directory',
+      category: 'Operations',
     },
     reports: {
-      title: 'Clinical & Operational Reports',
-      subtitle: 'Exportable stock valuation, expiry stratification, and audit ledgers',
+      title: 'Clinical & Operational Analytics',
+      category: 'Governance & Audit',
     },
     health: {
       title: 'System Health & Infrastructure',
-      subtitle: 'Service probes, database connectivity, and runtime metrics',
+      category: 'Governance & Audit',
     },
   };
 
-  const current = titles[currentTab] || { title: 'PharmaFlow', subtitle: 'Platform' };
+  const current = tabMetadata[currentTab] || { title: 'Workspace', category: 'Operations' };
 
   return (
-    <header className="h-16 bg-white border-b border-slate-200 px-6 sm:px-8 flex items-center justify-between sticky top-0 z-30 shadow-subtle">
-      <div>
-        <h2 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight">{current.title}</h2>
-        <p className="text-xs text-slate-500 hidden sm:block">{current.subtitle}</p>
+    <header className="h-16 bg-[#F8F7F2] border-b border-[#E6E5DD] px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30">
+      {/* Left: Mobile Toggle & Breadcrumbs */}
+      <div className="flex items-center gap-3">
+        <button
+          onClick={onToggleMobileMenu}
+          className="md:hidden p-2 rounded-lg text-[#252A27] hover:bg-[#E7EDE5] transition-colors"
+          aria-label="Open navigation menu"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+
+        <div>
+          <div className="flex items-center gap-1.5 text-[11px] text-[#777C76] font-medium">
+            <span>{current.category}</span>
+            <span>/</span>
+            <span className="text-[#183D32] font-semibold">{current.title}</span>
+          </div>
+          <h2 className="text-sm sm:text-base font-heading font-extrabold text-[#183D32] tracking-tight">
+            {current.title}
+          </h2>
+        </div>
       </div>
 
+      {/* Right Actions */}
       <div className="flex items-center gap-2.5">
         {/* Backend Status Indicator */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs">
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white border border-[#E6E5DD] shadow-subtle text-xs">
           <span
             className={`w-2 h-2 rounded-full ${
               isSuccess
-                ? 'bg-emerald-600'
+                ? 'bg-[#2D7A58]'
                 : isError
-                ? 'bg-red-600'
-                : 'bg-amber-500'
+                ? 'bg-[#C93B2B]'
+                : 'bg-[#C27803]'
             }`}
           />
-          <span className="font-medium text-slate-700">
-            {isSuccess ? 'API Online' : isError ? 'API Disconnected' : 'Connecting...'}
+          <span className="font-semibold text-[#252A27]">
+            {isSuccess ? 'Engine Online' : isError ? 'Engine Disconnected' : 'Connecting...'}
           </span>
           {health?.version && (
-            <span className="text-[10px] text-slate-400 font-mono">v{health.version}</span>
+            <span className="text-[10px] text-[#777C76] font-mono">v{health.version}</span>
           )}
         </div>
 
-        {/* Refresh button */}
+        {/* Refresh Action */}
         <button
           onClick={() => {
             refetch();
@@ -85,9 +114,9 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, onRefresh }) => {
           }}
           disabled={isFetching}
           title="Refresh view"
-          className="p-1.5 sm:p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 border border-slate-200 transition-colors disabled:opacity-50"
+          className="p-2 rounded-lg text-[#777C76] hover:text-[#183D32] hover:bg-[#E7EDE5] border border-[#E6E5DD] bg-white transition-colors disabled:opacity-50 shadow-subtle"
         >
-          <RefreshCw className={`w-4 h-4 ${isFetching ? 'animate-spin text-teal-700' : ''}`} />
+          <RefreshCw className={`w-3.5 h-3.5 ${isFetching ? 'animate-spin text-[#183D32]' : ''}`} />
         </button>
 
         {/* Swagger Docs Link */}
@@ -95,11 +124,21 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, onRefresh }) => {
           href="/docs"
           target="_blank"
           rel="noopener noreferrer"
-          className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium border border-slate-200 shadow-sm transition-colors"
+          className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-[#E7EDE5] text-[#183D32] text-xs font-semibold border border-[#E6E5DD] shadow-subtle transition-colors"
         >
-          <span>API Docs</span>
-          <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
+          <span>OpenAPI</span>
+          <ExternalLink className="w-3 h-3 text-[#777C76]" />
         </a>
+
+        {/* User Pill */}
+        <div className="hidden lg:flex items-center gap-2 pl-2 border-l border-[#E6E5DD]">
+          <div className="w-7 h-7 rounded-full bg-[#183D32] text-white flex items-center justify-center font-heading font-bold text-xs">
+            {currentUser?.name ? currentUser.name.charAt(0).toUpperCase() : 'P'}
+          </div>
+          <span className="text-xs font-medium text-[#252A27]">
+            {currentUser?.name || 'Pharmacist'}
+          </span>
+        </div>
       </div>
     </header>
   );

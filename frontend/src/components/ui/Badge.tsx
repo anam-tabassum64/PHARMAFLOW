@@ -2,29 +2,27 @@ import React from 'react';
 import { MovementType } from '../../types/movement';
 
 interface BadgeProps {
+  variant?: 'success' | 'warning' | 'danger' | 'info' | 'neutral';
   children: React.ReactNode;
-  variant?: 'success' | 'danger' | 'warning' | 'info' | 'neutral' | 'teal';
-  size?: 'sm' | 'md';
+  className?: string;
 }
 
-export const Badge: React.FC<BadgeProps> = ({ children, variant = 'neutral', size = 'sm' }) => {
+export const Badge: React.FC<BadgeProps> = ({
+  variant = 'neutral',
+  children,
+  className = '',
+}) => {
   const variantStyles = {
-    success: 'bg-emerald-50 text-emerald-800 border-emerald-200',
-    danger: 'bg-red-50 text-red-800 border-red-200',
-    warning: 'bg-amber-50 text-amber-800 border-amber-200',
-    info: 'bg-blue-50 text-blue-800 border-blue-200',
-    neutral: 'bg-slate-50 text-slate-700 border-slate-200',
-    teal: 'bg-teal-50 text-teal-800 border-teal-200',
-  };
-
-  const sizeStyles = {
-    sm: 'text-[11px] px-2 py-0.5 rounded font-medium',
-    md: 'text-xs px-2.5 py-1 rounded font-medium',
+    success: 'bg-[#E7EDE5] text-[#183D32] border-[#A8B8A2]/40',
+    warning: 'bg-[#FEF3C7] text-[#92400E] border-[#FDE68A]',
+    danger: 'bg-[#FEE2E2] text-[#991B1B] border-[#FECACA]',
+    info: 'bg-[#F1F0E9] text-[#252A27] border-[#E6E5DD]',
+    neutral: 'bg-[#F8F7F2] text-[#777C76] border-[#E6E5DD]',
   };
 
   return (
     <span
-      className={`inline-flex items-center gap-1 border ${variantStyles[variant]} ${sizeStyles[size]}`}
+      className={`inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold border ${variantStyles[variant]} ${className}`}
     >
       {children}
     </span>
@@ -32,16 +30,32 @@ export const Badge: React.FC<BadgeProps> = ({ children, variant = 'neutral', siz
 };
 
 export const MovementBadge: React.FC<{ type: MovementType }> = ({ type }) => {
-  switch (type) {
-    case 'PURCHASE':
-      return <Badge variant="success">PURCHASE</Badge>;
-    case 'SALE':
-      return <Badge variant="teal">SALE</Badge>;
-    case 'RETURN':
-      return <Badge variant="warning">RETURN</Badge>;
-    case 'ADJUSTMENT':
-      return <Badge variant="neutral">ADJUSTMENT</Badge>;
-    default:
-      return <Badge variant="neutral">{type}</Badge>;
-  }
+  const configs: Record<MovementType, { label: string; style: string }> = {
+    PURCHASE: {
+      label: 'Purchase (Inward)',
+      style: 'bg-[#E7EDE5] text-[#183D32] border-[#A8B8A2]/40',
+    },
+    SALE: {
+      label: 'Sale (Dispense)',
+      style: 'bg-[#F1F0E9] text-[#252A27] border-[#E6E5DD]',
+    },
+    RETURN: {
+      label: 'Patient Return',
+      style: 'bg-[#FEF3C7] text-[#92400E] border-[#FDE68A]',
+    },
+    ADJUSTMENT: {
+      label: 'Stock Adjustment',
+      style: 'bg-[#F8F7F2] text-[#4C544F] border-[#E6E5DD]',
+    },
+  };
+
+  const config = configs[type] || { label: type, style: 'bg-[#F8F7F2] text-[#777C76] border-[#E6E5DD]' };
+
+  return (
+    <span
+      className={`inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold border ${config.style}`}
+    >
+      {config.label}
+    </span>
+  );
 };

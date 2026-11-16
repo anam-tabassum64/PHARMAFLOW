@@ -38,14 +38,14 @@ export const MovementsPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Operations Action Bar */}
-      <div className="p-5 rounded-lg bg-white border border-slate-200/90 shadow-sm flex flex-wrap items-center justify-between gap-4">
+      <div className="p-6 rounded-xl bg-white border border-[#E6E5DD] shadow-subtle flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="text-base font-bold text-slate-900 tracking-tight flex items-center gap-2">
-            <ArrowLeftRight className="w-4 h-4 text-teal-700" />
+          <h2 className="text-base font-heading font-bold text-[#252A27] tracking-tight flex items-center gap-2">
+            <ArrowLeftRight className="w-4 h-4 text-[#183D32]" />
             Stock Movements & Audit Operations
           </h2>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Every material transaction updates batch quantity and commits an immutable audit record.
+          <p className="text-xs text-[#777C76] mt-1">
+            Every material transaction updates batch quantity and commits an immutable, timestamped audit record.
           </p>
         </div>
 
@@ -53,30 +53,30 @@ export const MovementsPage: React.FC = () => {
         <div className="flex flex-wrap items-center gap-2.5">
           <button
             onClick={() => setIsPurchaseOpen(true)}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold bg-teal-700 hover:bg-teal-800 text-white shadow-sm transition-colors"
+            className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-semibold bg-[#183D32] hover:bg-[#122E26] text-white shadow-subtle transition-all duration-150"
           >
             <ShoppingCart className="w-3.5 h-3.5" />
             <span>Purchase (Inward)</span>
           </button>
           <button
             onClick={() => setIsSaleOpen(true)}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold bg-[#14243A] hover:bg-slate-800 text-white shadow-sm transition-colors"
+            className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-semibold bg-[#252A27] hover:bg-black text-white shadow-subtle transition-all duration-150"
           >
             <Send className="w-3.5 h-3.5" />
             <span>Sale (Dispense)</span>
           </button>
           <button
             onClick={() => setIsReturnOpen(true)}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold bg-amber-600 hover:bg-amber-700 text-white shadow-sm transition-colors"
+            className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-semibold bg-amber-700 hover:bg-amber-800 text-white shadow-subtle transition-all duration-150"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Process Return</span>
           </button>
           <button
             onClick={() => setIsAdjustmentOpen(true)}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 shadow-sm transition-colors"
+            className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-semibold bg-white hover:bg-[#F8F7F2] text-[#252A27] border border-[#E6E5DD] shadow-subtle transition-all duration-150"
           >
-            <Sliders className="w-3.5 h-3.5 text-slate-500" />
+            <Sliders className="w-3.5 h-3.5 text-[#777C76]" />
             <span>Adjust Stock</span>
           </button>
         </div>
@@ -88,10 +88,10 @@ export const MovementsPage: React.FC = () => {
           <button
             key={type}
             onClick={() => setSelectedType(type)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-150 ${
               selectedType === type
-                ? 'bg-slate-900 text-white shadow-sm'
-                : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-300'
+                ? 'bg-[#183D32] text-white shadow-subtle'
+                : 'bg-white text-[#252A27] hover:bg-[#F8F7F2] border border-[#E6E5DD]'
             }`}
           >
             {type}
@@ -100,9 +100,9 @@ export const MovementsPage: React.FC = () => {
       </div>
 
       {/* Movements Audit Table Card */}
-      <div className="rounded-lg bg-white border border-slate-200/90 shadow-sm overflow-hidden">
+      <div className="rounded-xl bg-white border border-[#E6E5DD] shadow-subtle overflow-hidden">
         {isLoading ? (
-          <div className="p-4">
+          <div className="p-6">
             <TableSkeleton rows={8} cols={7} />
           </div>
         ) : !movements || movements.length === 0 ? (
@@ -114,53 +114,53 @@ export const MovementsPage: React.FC = () => {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-700 font-semibold border-b border-slate-200 uppercase tracking-wider text-[11px]">
+              <thead className="bg-[#F1F0E9] text-[#252A27] font-heading font-semibold border-b border-[#E6E5DD] uppercase tracking-wider text-[11px]">
                 <tr>
-                  <th className="py-3 px-4">Date / Time</th>
-                  <th className="py-3 px-4">Ref Number</th>
-                  <th className="py-3 px-4">Type</th>
-                  <th className="py-3 px-4">Medicine Item</th>
-                  <th className="py-3 px-4">Batch Lot</th>
-                  <th className="py-3 px-4 text-right">Quantity Delta</th>
-                  <th className="py-3 px-4">Audit Justification / Notes</th>
+                  <th className="py-3.5 px-4">Date / Time</th>
+                  <th className="py-3.5 px-4">Ref Number</th>
+                  <th className="py-3.5 px-4">Type</th>
+                  <th className="py-3.5 px-4">Medicine Item</th>
+                  <th className="py-3.5 px-4">Batch Lot</th>
+                  <th className="py-3.5 px-4 text-right">Quantity Delta</th>
+                  <th className="py-3.5 px-4">Audit Justification / Notes</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 text-slate-700">
+              <tbody className="divide-y divide-[#E6E5DD]/60 text-[#252A27]">
                 {movements.map((m) => {
                   const dateStr = new Date(m.created_at).toLocaleString();
                   const isPositive = m.quantity > 0;
 
                   return (
-                    <tr key={m.id} className="hover:bg-slate-50/70 transition-colors">
-                      <td className="py-3 px-4 text-slate-500 font-mono text-[11px] whitespace-nowrap">
+                    <tr key={m.id} className="hover:bg-[#F8F7F2]/80 transition-colors">
+                      <td className="py-3.5 px-4 text-[#777C76] font-mono text-[11px] whitespace-nowrap">
                         {dateStr}
                       </td>
-                      <td className="py-3 px-4 font-mono font-medium text-slate-900">
+                      <td className="py-3.5 px-4 font-mono font-medium text-[#252A27]">
                         {m.reference_number}
                       </td>
-                      <td className="py-3 px-4">
+                      <td className="py-3.5 px-4">
                         <MovementBadge type={m.movement_type} />
                       </td>
-                      <td className="py-3 px-4">
-                        <span className="font-semibold text-slate-900 block">
+                      <td className="py-3.5 px-4">
+                        <span className="font-semibold text-[#252A27] block">
                           {m.medicine_name || 'N/A'}
                         </span>
                         {m.medicine_code && (
-                          <span className="text-[10px] text-teal-700 font-mono">
+                          <span className="text-[10px] text-[#183D32] font-mono font-semibold">
                             {m.medicine_code}
                           </span>
                         )}
                       </td>
-                      <td className="py-3 px-4 font-mono text-slate-600">
+                      <td className="py-3.5 px-4 font-mono text-[#777C76]">
                         {m.batch_number || 'N/A'}
                       </td>
-                      <td className="py-3 px-4 text-right font-mono font-bold text-xs">
+                      <td className="py-3.5 px-4 text-right font-mono font-bold text-xs">
                         <span className={isPositive ? 'text-emerald-700' : 'text-red-700'}>
                           {isPositive ? `+${m.quantity}` : m.quantity}
                         </span>
                       </td>
-                      <td className="py-3 px-4 text-slate-600 max-w-xs truncate">
-                        {m.notes || <span className="text-slate-400 italic">No notes</span>}
+                      <td className="py-3.5 px-4 text-[#777C76] max-w-xs truncate">
+                        {m.notes || <span className="text-[#A8B8A2] italic">No notes</span>}
                       </td>
                     </tr>
                   );
@@ -179,3 +179,4 @@ export const MovementsPage: React.FC = () => {
     </div>
   );
 };
+export default MovementsPage;

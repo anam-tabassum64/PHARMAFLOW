@@ -83,13 +83,13 @@ export const MedicinesPage: React.FC = () => {
         <div className="flex flex-1 items-center gap-3 max-w-xl">
           {/* Search Box */}
           <div className="relative flex-1">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-[#777C76] absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search by code, brand name, generic chemical, or manufacturer..."
+              placeholder="Search by code, commercial name, generic chemical, or manufacturer..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 shadow-sm transition-colors"
+              className="w-full pl-9 pr-4 py-2 rounded-xl bg-white border border-[#E6E5DD] text-xs text-[#252A27] placeholder-[#777C76] focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] shadow-subtle transition-colors"
             />
           </div>
 
@@ -98,7 +98,7 @@ export const MedicinesPage: React.FC = () => {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value === 'All Categories' ? '' : e.target.value)}
-              className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 shadow-sm transition-colors"
+              className="w-full px-3 py-2 rounded-xl bg-white border border-[#E6E5DD] text-xs text-[#252A27] focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] shadow-subtle transition-colors"
             >
               {categories.map((c) => (
                 <option key={c} value={c === 'All Categories' ? '' : c}>
@@ -115,7 +115,7 @@ export const MedicinesPage: React.FC = () => {
             setMedicineToEdit(null);
             setIsAddModalOpen(true);
           }}
-          className="flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold bg-teal-700 hover:bg-teal-800 text-white shadow-sm transition-colors"
+          className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-semibold bg-[#183D32] hover:bg-[#122E26] text-white shadow-subtle transition-all duration-150"
         >
           <Plus className="w-4 h-4" />
           <span>Add Medicine</span>
@@ -123,9 +123,9 @@ export const MedicinesPage: React.FC = () => {
       </div>
 
       {/* Main Table Card */}
-      <div className="rounded-lg bg-white border border-slate-200/90 shadow-sm overflow-hidden">
+      <div className="rounded-xl bg-white border border-[#E6E5DD] shadow-subtle overflow-hidden">
         {isLoading ? (
-          <div className="p-4">
+          <div className="p-6">
             <TableSkeleton rows={8} cols={7} />
           </div>
         ) : isError ? (
@@ -150,52 +150,52 @@ export const MedicinesPage: React.FC = () => {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-700 font-semibold border-b border-slate-200 uppercase tracking-wider text-[11px]">
+              <thead className="bg-[#F1F0E9] text-[#252A27] font-heading font-semibold border-b border-[#E6E5DD] uppercase tracking-wider text-[11px]">
                 <tr>
-                  <th className="py-3 px-4">Code</th>
-                  <th className="py-3 px-4">Commercial Name</th>
-                  <th className="py-3 px-4">Generic Formula</th>
-                  <th className="py-3 px-4">Category</th>
-                  <th className="py-3 px-4">Manufacturer</th>
-                  <th className="py-3 px-4 text-center">Batches</th>
-                  <th className="py-3 px-4 text-right">Available Stock</th>
-                  <th className="py-3 px-4 text-center">Status</th>
-                  <th className="py-3 px-4 text-right">Actions</th>
+                  <th className="py-3.5 px-4">Code</th>
+                  <th className="py-3.5 px-4">Commercial Name</th>
+                  <th className="py-3.5 px-4">Generic Formula</th>
+                  <th className="py-3.5 px-4">Category</th>
+                  <th className="py-3.5 px-4">Manufacturer</th>
+                  <th className="py-3.5 px-4 text-center">Batches</th>
+                  <th className="py-3.5 px-4 text-right">Available Stock</th>
+                  <th className="py-3.5 px-4 text-center">Status</th>
+                  <th className="py-3.5 px-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 text-slate-700">
+              <tbody className="divide-y divide-[#E6E5DD]/60 text-[#252A27]">
                 {medicines.map((m) => {
                   const isLow = m.total_available_stock <= m.reorder_level;
                   return (
-                    <tr key={m.id} className="hover:bg-slate-50/70 transition-colors">
-                      <td className="py-3 px-4 font-mono font-medium text-teal-700">
+                    <tr key={m.id} className="hover:bg-[#F8F7F2]/80 transition-colors">
+                      <td className="py-3.5 px-4 font-mono font-semibold text-[#183D32]">
                         {m.medicine_code}
                       </td>
-                      <td className="py-3 px-4 font-semibold text-slate-900">
+                      <td className="py-3.5 px-4 font-medium text-[#252A27]">
                         {m.name}
                       </td>
-                      <td className="py-3 px-4 text-slate-500 italic">
+                      <td className="py-3.5 px-4 text-[#777C76] italic">
                         {m.generic_name}
                       </td>
-                      <td className="py-3 px-4">
-                        <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-medium text-[11px] border border-slate-200">
+                      <td className="py-3.5 px-4">
+                        <span className="px-2.5 py-0.5 rounded-full bg-[#F1F0E9] text-[#252A27] font-medium text-[11px] border border-[#E6E5DD]">
                           {m.category}
                         </span>
                       </td>
-                      <td className="py-3 px-4 text-slate-600">
+                      <td className="py-3.5 px-4 text-[#777C76]">
                         {m.manufacturer}
                       </td>
-                      <td className="py-3 px-4 text-center font-medium text-slate-800">
+                      <td className="py-3.5 px-4 text-center font-mono font-medium text-[#252A27]">
                         {m.batch_count}
                       </td>
-                      <td className="py-3 px-4 text-right">
+                      <td className="py-3.5 px-4 text-right">
                         <span
                           className={`font-mono font-bold text-xs ${
-                            isLow ? 'text-amber-700' : 'text-slate-900'
+                            isLow ? 'text-amber-700' : 'text-[#252A27]'
                           }`}
                         >
                           {m.total_available_stock}{' '}
-                          <span className="text-[10px] text-slate-500 font-normal">
+                          <span className="text-[10px] text-[#777C76] font-normal">
                             {m.unit}
                           </span>
                         </span>
@@ -205,19 +205,19 @@ export const MedicinesPage: React.FC = () => {
                           </span>
                         )}
                       </td>
-                      <td className="py-3 px-4 text-center">
+                      <td className="py-3.5 px-4 text-center">
                         {m.is_active ? (
                           <Badge variant="success">Active</Badge>
                         ) : (
                           <Badge variant="neutral">Archived</Badge>
                         )}
                       </td>
-                      <td className="py-3 px-4 text-right">
+                      <td className="py-3.5 px-4 text-right">
                         <div className="flex items-center justify-end gap-1">
                           <button
                             onClick={() => setMedicineToView(m)}
                             title="View Batches & Info"
-                            className="p-1.5 rounded-md text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors"
+                            className="p-1.5 rounded-lg text-[#777C76] hover:text-[#183D32] hover:bg-[#F1F0E9] transition-colors"
                           >
                             <Eye className="w-4 h-4" />
                           </button>
@@ -227,7 +227,7 @@ export const MedicinesPage: React.FC = () => {
                               setIsAddModalOpen(true);
                             }}
                             title="Edit Details"
-                            className="p-1.5 rounded-md text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors"
+                            className="p-1.5 rounded-lg text-[#777C76] hover:text-[#183D32] hover:bg-[#F1F0E9] transition-colors"
                           >
                             <Edit2 className="w-4 h-4" />
                           </button>
@@ -235,7 +235,7 @@ export const MedicinesPage: React.FC = () => {
                             onClick={() => handleDelete(m)}
                             title="Delete Medicine"
                             disabled={deleteMutation.isPending}
-                            className="p-1.5 rounded-md text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                            className="p-1.5 rounded-lg text-[#777C76] hover:text-[#991B1B] hover:bg-[#FEE2E2] transition-colors"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -268,3 +268,4 @@ export const MedicinesPage: React.FC = () => {
     </div>
   );
 };
+export default MedicinesPage;

@@ -55,43 +55,43 @@ export const InventoryPage: React.FC = () => {
     <div className="space-y-6">
       {/* KPI Overview Strip */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-4 rounded-lg bg-white border border-slate-200/90 shadow-sm flex items-center gap-3.5">
-          <div className="p-2.5 rounded-lg bg-teal-50 text-teal-700 border border-teal-200/60">
+        <div className="p-4 rounded-xl bg-white border border-[#E6E5DD] shadow-subtle flex items-center gap-3.5">
+          <div className="w-10 h-10 rounded-xl bg-[#E7EDE5] text-[#183D32] flex items-center justify-center shrink-0">
             <PackageCheck className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">
+            <span className="text-[11px] font-semibold text-[#777C76] uppercase tracking-wider block">
               Total Stock Units
             </span>
-            <span className="text-xl font-bold text-slate-900">
+            <span className="text-xl font-heading font-bold text-[#183D32]">
               {summary?.total_units_in_stock?.toLocaleString() || 0}
             </span>
           </div>
         </div>
 
-        <div className="p-4 rounded-lg bg-white border border-slate-200/90 shadow-sm flex items-center gap-3.5">
-          <div className="p-2.5 rounded-lg bg-amber-50 text-amber-700 border border-amber-200/60">
+        <div className="p-4 rounded-xl bg-white border border-[#E6E5DD] shadow-subtle flex items-center gap-3.5">
+          <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center shrink-0">
             <TrendingDown className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">
+            <span className="text-[11px] font-semibold text-[#777C76] uppercase tracking-wider block">
               Low-Stock Deficit Items
             </span>
-            <span className="text-xl font-bold text-amber-700">
+            <span className="text-xl font-heading font-bold text-amber-700">
               {summary?.low_stock_medicines_count || 0}
             </span>
           </div>
         </div>
 
-        <div className="p-4 rounded-lg bg-white border border-slate-200/90 shadow-sm flex items-center gap-3.5">
-          <div className="p-2.5 rounded-lg bg-slate-100 text-slate-700 border border-slate-200">
+        <div className="p-4 rounded-xl bg-white border border-[#E6E5DD] shadow-subtle flex items-center gap-3.5">
+          <div className="w-10 h-10 rounded-xl bg-[#F1F0E9] text-[#252A27] flex items-center justify-center shrink-0">
             <Layers className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">
+            <span className="text-[11px] font-semibold text-[#777C76] uppercase tracking-wider block">
               Active Formularies
             </span>
-            <span className="text-xl font-bold text-slate-900">
+            <span className="text-xl font-heading font-bold text-[#252A27]">
               {summary?.active_medicines || 0} Products
             </span>
           </div>
@@ -103,20 +103,20 @@ export const InventoryPage: React.FC = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setFilterMode('all')}
-            className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+            className={`px-4 py-2.5 rounded-xl text-xs font-semibold transition-all duration-150 ${
               filterMode === 'all'
-                ? 'bg-teal-700 text-white shadow-sm'
-                : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-300'
+                ? 'bg-[#183D32] text-white shadow-subtle'
+                : 'bg-white text-[#252A27] hover:bg-[#F8F7F2] border border-[#E6E5DD]'
             }`}
           >
             All Inventory ({inventory?.length || 0})
           </button>
           <button
             onClick={() => setFilterMode('low')}
-            className={`px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+            className={`px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all duration-150 ${
               filterMode === 'low'
-                ? 'bg-amber-600 text-white shadow-sm'
-                : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-300'
+                ? 'bg-amber-600 text-white shadow-subtle'
+                : 'bg-white text-[#252A27] hover:bg-[#F8F7F2] border border-[#E6E5DD]'
             }`}
           >
             <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
@@ -126,21 +126,21 @@ export const InventoryPage: React.FC = () => {
 
         {/* Search Input */}
         <div className="relative w-full sm:w-80">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-[#777C76] absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             placeholder="Search inventory items..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 shadow-sm transition-colors"
+            className="w-full pl-9 pr-4 py-2 rounded-xl bg-white border border-[#E6E5DD] text-xs text-[#252A27] placeholder-[#777C76] focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] shadow-subtle transition-colors"
           />
         </div>
       </div>
 
       {/* Main Inventory Table Card */}
-      <div className="rounded-lg bg-white border border-slate-200/90 shadow-sm overflow-hidden">
+      <div className="rounded-xl bg-white border border-[#E6E5DD] shadow-subtle overflow-hidden">
         {isInvLoading ? (
-          <div className="p-4">
+          <div className="p-6">
             <TableSkeleton rows={8} cols={6} />
           </div>
         ) : filteredMedicines.length === 0 ? (
@@ -152,18 +152,18 @@ export const InventoryPage: React.FC = () => {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-700 font-semibold border-b border-slate-200 uppercase tracking-wider text-[11px]">
+              <thead className="bg-[#F1F0E9] text-[#252A27] font-heading font-semibold border-b border-[#E6E5DD] uppercase tracking-wider text-[11px]">
                 <tr>
-                  <th className="py-3 px-4">Medicine Item</th>
-                  <th className="py-3 px-4">Category</th>
-                  <th className="py-3 px-4">Batches</th>
-                  <th className="py-3 px-4">Stock vs Reorder Threshold</th>
-                  <th className="py-3 px-4 text-right">Available Quantity</th>
-                  <th className="py-3 px-4 text-center">Stock Health</th>
-                  <th className="py-3 px-4 text-right">Actions</th>
+                  <th className="py-3.5 px-4">Medicine Item</th>
+                  <th className="py-3.5 px-4">Category</th>
+                  <th className="py-3.5 px-4">Batches</th>
+                  <th className="py-3.5 px-4">Stock vs Reorder Threshold</th>
+                  <th className="py-3.5 px-4 text-right">Available Quantity</th>
+                  <th className="py-3.5 px-4 text-center">Stock Health</th>
+                  <th className="py-3.5 px-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 text-slate-700">
+              <tbody className="divide-y divide-[#E6E5DD]/60 text-[#252A27]">
                 {filteredMedicines.map((m) => {
                   const isLow = m.total_available_stock <= m.reorder_level;
                   const ratio = Math.min(
@@ -172,45 +172,45 @@ export const InventoryPage: React.FC = () => {
                   );
 
                   return (
-                    <tr key={m.id} className="hover:bg-slate-50/70 transition-colors">
-                      <td className="py-3 px-4">
-                        <span className="font-semibold text-slate-900 block text-xs">{m.name}</span>
-                        <span className="text-[11px] font-mono text-teal-700">
+                    <tr key={m.id} className="hover:bg-[#F8F7F2]/80 transition-colors">
+                      <td className="py-3.5 px-4">
+                        <span className="font-semibold text-[#252A27] block text-xs">{m.name}</span>
+                        <span className="text-[11px] font-mono font-semibold text-[#183D32]">
                           {m.medicine_code}
                         </span>{' '}
-                        • <span className="text-[11px] text-slate-500">{m.manufacturer}</span>
+                        • <span className="text-[11px] text-[#777C76]">{m.manufacturer}</span>
                       </td>
-                      <td className="py-3 px-4">
-                        <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-medium text-[11px] border border-slate-200">
+                      <td className="py-3.5 px-4">
+                        <span className="px-2.5 py-0.5 rounded-full bg-[#F1F0E9] text-[#252A27] font-medium text-[11px] border border-[#E6E5DD]">
                           {m.category}
                         </span>
                       </td>
-                      <td className="py-3 px-4 font-medium text-slate-800">
+                      <td className="py-3.5 px-4 font-mono font-medium text-[#252A27]">
                         {m.batch_count} {m.batch_count === 1 ? 'batch' : 'batches'}
                       </td>
-                      <td className="py-3 px-4 w-52">
+                      <td className="py-3.5 px-4 w-52">
                         <div className="space-y-1">
-                          <div className="flex justify-between text-[10px] text-slate-500">
+                          <div className="flex justify-between text-[10px] text-[#777C76]">
                             <span>Avail: {m.total_available_stock}</span>
                             <span>Reorder: {m.reorder_level}</span>
                           </div>
-                          <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                          <div className="w-full bg-[#F1F0E9] rounded-full h-1.5 overflow-hidden">
                             <div
-                              className={`h-full rounded-full ${
-                                isLow ? 'bg-amber-500' : 'bg-teal-600'
+                              className={`h-full rounded-full transition-all duration-500 ${
+                                isLow ? 'bg-amber-500' : 'bg-[#183D32]'
                               }`}
                               style={{ width: `${ratio}%` }}
                             />
                           </div>
                         </div>
                       </td>
-                      <td className="py-3 px-4 text-right font-mono font-bold text-xs">
-                        <span className={isLow ? 'text-amber-700' : 'text-slate-900'}>
+                      <td className="py-3.5 px-4 text-right font-mono font-bold text-xs">
+                        <span className={isLow ? 'text-amber-700' : 'text-[#252A27]'}>
                           {m.total_available_stock}
                         </span>{' '}
-                        <span className="text-[10px] text-slate-500 font-normal">{m.unit}</span>
+                        <span className="text-[10px] text-[#777C76] font-normal">{m.unit}</span>
                       </td>
-                      <td className="py-3 px-4 text-center">
+                      <td className="py-3.5 px-4 text-center">
                         {m.total_available_stock === 0 ? (
                           <Badge variant="danger">Out of Stock</Badge>
                         ) : isLow ? (
@@ -219,18 +219,18 @@ export const InventoryPage: React.FC = () => {
                           <Badge variant="success">Optimal</Badge>
                         )}
                       </td>
-                      <td className="py-3 px-4 text-right">
+                      <td className="py-3.5 px-4 text-right">
                         <div className="flex items-center justify-end gap-1.5">
                           <button
                             onClick={() => setDetailMedicine(m)}
                             title="Inspect Batches"
-                            className="p-1.5 rounded-md text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors"
+                            className="p-1.5 rounded-lg text-[#777C76] hover:text-[#183D32] hover:bg-[#F1F0E9] transition-colors"
                           >
                             <Eye className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => setRestockMedicineId(m.id)}
-                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-white text-teal-700 hover:bg-teal-50 border border-teal-700/40 shadow-sm transition-colors"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-white text-[#183D32] hover:bg-[#E7EDE5] border border-[#A8B8A2] shadow-subtle transition-all duration-150"
                           >
                             <ShoppingCart className="w-3.5 h-3.5" />
                             <span>Restock</span>
@@ -264,3 +264,4 @@ export const InventoryPage: React.FC = () => {
     </div>
   );
 };
+export default InventoryPage;

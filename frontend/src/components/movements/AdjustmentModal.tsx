@@ -98,13 +98,13 @@ export const AdjustmentModal: React.FC<AdjustmentModalProps> = ({ isOpen, onClos
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {errorMsg && (
-          <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs font-medium">
+          <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium">
             {errorMsg}
           </div>
         )}
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">
+          <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
             Target Batch Lot *
           </label>
           <select
@@ -112,7 +112,7 @@ export const AdjustmentModal: React.FC<AdjustmentModalProps> = ({ isOpen, onClos
             disabled={adjustmentMutation.isPending}
             value={batchId}
             onChange={(e) => setBatchId(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
+            className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] transition-colors"
           >
             <option value="">-- Choose Batch Lot --</option>
             {batches?.map((b) => (
@@ -125,17 +125,17 @@ export const AdjustmentModal: React.FC<AdjustmentModalProps> = ({ isOpen, onClos
 
         {/* Direction Switcher */}
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+          <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
             Adjustment Direction *
           </label>
           <div className="grid grid-cols-2 gap-3">
             <button
               type="button"
               onClick={() => setDirection('DECREASE')}
-              className={`flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-semibold border transition-all ${
+              className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-semibold border transition-all duration-150 ${
                 direction === 'DECREASE'
-                  ? 'bg-red-50 border-red-300 text-red-700 shadow-sm'
-                  : 'bg-white border-slate-300 text-slate-700 hover:bg-slate-50'
+                  ? 'bg-red-50 border-red-300 text-red-700 shadow-subtle'
+                  : 'bg-white border-[#E6E5DD] text-[#252A27] hover:bg-[#F8F7F2]'
               }`}
             >
               <ArrowDownRight className="w-4 h-4 text-red-600" />
@@ -144,13 +144,13 @@ export const AdjustmentModal: React.FC<AdjustmentModalProps> = ({ isOpen, onClos
             <button
               type="button"
               onClick={() => setDirection('INCREASE')}
-              className={`flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-semibold border transition-all ${
+              className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-semibold border transition-all duration-150 ${
                 direction === 'INCREASE'
-                  ? 'bg-emerald-50 border-emerald-300 text-emerald-700 shadow-sm'
-                  : 'bg-white border-slate-300 text-slate-700 hover:bg-slate-50'
+                  ? 'bg-[#E7EDE5] border-[#A8B8A2] text-[#183D32] shadow-subtle'
+                  : 'bg-white border-[#E6E5DD] text-[#252A27] hover:bg-[#F8F7F2]'
               }`}
             >
-              <ArrowUpRight className="w-4 h-4 text-emerald-600" />
+              <ArrowUpRight className="w-4 h-4 text-[#183D32]" />
               Increase (Surplus / Audit Found)
             </button>
           </div>
@@ -158,7 +158,7 @@ export const AdjustmentModal: React.FC<AdjustmentModalProps> = ({ isOpen, onClos
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
               Quantity to Adjust *
             </label>
             <input
@@ -168,12 +168,12 @@ export const AdjustmentModal: React.FC<AdjustmentModalProps> = ({ isOpen, onClos
               disabled={adjustmentMutation.isPending}
               value={quantity}
               onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
-              className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 font-mono focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] font-mono focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] transition-colors"
             />
             {selectedBatch && (
-              <span className="text-[11px] text-slate-500 mt-1 block">
+              <span className="text-[11px] text-[#777C76] mt-1 block">
                 Projected New Stock:{' '}
-                <strong className="text-slate-900 font-mono">
+                <strong className="text-[#252A27] font-mono">
                   {direction === 'INCREASE'
                     ? selectedBatch.available_quantity + quantity
                     : Math.max(0, selectedBatch.available_quantity - quantity)}
@@ -183,7 +183,7 @@ export const AdjustmentModal: React.FC<AdjustmentModalProps> = ({ isOpen, onClos
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
               Audit Ref / Incident Ticket
             </label>
             <input
@@ -192,13 +192,13 @@ export const AdjustmentModal: React.FC<AdjustmentModalProps> = ({ isOpen, onClos
               disabled={adjustmentMutation.isPending}
               value={refNumber}
               onChange={(e) => setRefNumber(e.target.value.toUpperCase())}
-              className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 font-mono placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] font-mono placeholder-[#777C76] focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] transition-colors"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">
+          <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
             Mandatory Justification / Reason *
           </label>
           <textarea
@@ -208,23 +208,23 @@ export const AdjustmentModal: React.FC<AdjustmentModalProps> = ({ isOpen, onClos
             placeholder="e.g. Damaged blister pack discarded during physical quality assurance audit"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors resize-none"
+            className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] placeholder-[#777C76] focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] transition-colors resize-none"
           />
         </div>
 
-        <div className="flex justify-end gap-3 pt-4 border-t border-slate-200">
+        <div className="flex justify-end gap-3 pt-4 border-t border-[#E6E5DD]">
           <button
             type="button"
             onClick={onClose}
             disabled={adjustmentMutation.isPending}
-            className="px-4 py-2 rounded-lg text-xs font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-colors"
+            className="px-4 py-2.5 rounded-xl text-xs font-medium text-[#252A27] bg-white border border-[#E6E5DD] hover:bg-[#F8F7F2] shadow-subtle transition-colors"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={adjustmentMutation.isPending || !batchId}
-            className="px-5 py-2 rounded-lg text-xs font-semibold bg-teal-700 hover:bg-teal-800 text-white shadow-sm transition-colors disabled:opacity-50 flex items-center gap-1.5"
+            className="px-5 py-2.5 rounded-xl text-xs font-semibold bg-[#183D32] hover:bg-[#122E26] text-white shadow-subtle transition-all duration-150 disabled:opacity-50 flex items-center gap-1.5"
           >
             <Sliders className="w-3.5 h-3.5" />
             <span>{adjustmentMutation.isPending ? 'Reconciling...' : 'Commit Adjustment'}</span>
@@ -234,3 +234,4 @@ export const AdjustmentModal: React.FC<AdjustmentModalProps> = ({ isOpen, onClos
     </Modal>
   );
 };
+export default AdjustmentModal;

@@ -6,7 +6,7 @@ interface StatCardProps {
   value: string | number;
   subtitle?: string;
   icon: LucideIcon;
-  variant?: 'teal' | 'emerald' | 'amber' | 'rose' | 'navy' | 'slate';
+  variant?: 'forest' | 'sage' | 'amber' | 'rose' | 'charcoal' | 'teal' | 'emerald' | 'navy';
   badge?: string;
 }
 
@@ -15,61 +15,84 @@ export const StatCard: React.FC<StatCardProps> = ({
   value,
   subtitle,
   icon: Icon,
-  variant = 'teal',
+  variant = 'forest',
   badge,
 }) => {
   const variantStyles = {
-    teal: {
-      iconBg: 'bg-teal-50 text-teal-700 border-teal-200/60',
-      accent: 'border-l-4 border-l-teal-700',
+    forest: {
+      iconBg: 'bg-[#E7EDE5] text-[#183D32] border border-[#A8B8A2]/30',
+      accent: 'border-l-4 border-l-[#183D32]',
     },
-    emerald: {
-      iconBg: 'bg-emerald-50 text-emerald-700 border-emerald-200/60',
-      accent: 'border-l-4 border-l-emerald-600',
+    sage: {
+      iconBg: 'bg-[#F1F0E9] text-[#4C544F] border border-[#E6E5DD]',
+      accent: 'border-l-4 border-l-[#A8B8A2]',
     },
     amber: {
-      iconBg: 'bg-amber-50 text-amber-700 border-amber-200/60',
-      accent: 'border-l-4 border-l-amber-600',
+      iconBg: 'bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A]',
+      accent: 'border-l-4 border-l-[#C27803]',
     },
     rose: {
-      iconBg: 'bg-red-50 text-red-700 border-red-200/60',
-      accent: 'border-l-4 border-l-red-600',
+      iconBg: 'bg-[#FEE2E2] text-[#991B1B] border border-[#FECACA]',
+      accent: 'border-l-4 border-l-[#C93B2B]',
+    },
+    charcoal: {
+      iconBg: 'bg-[#F1F0E9] text-[#252A27] border border-[#E6E5DD]',
+      accent: 'border-l-4 border-l-[#252A27]',
+    },
+    // Backwards compatibility mappings
+    teal: {
+      iconBg: 'bg-[#E7EDE5] text-[#183D32] border border-[#A8B8A2]/30',
+      accent: 'border-l-4 border-l-[#183D32]',
+    },
+    emerald: {
+      iconBg: 'bg-[#E7EDE5] text-[#183D32] border border-[#A8B8A2]/30',
+      accent: 'border-l-4 border-l-[#183D32]',
     },
     navy: {
-      iconBg: 'bg-slate-100 text-navy-800 border-slate-200',
-      accent: 'border-l-4 border-l-navy-800',
-    },
-    slate: {
-      iconBg: 'bg-slate-50 text-slate-600 border-slate-200',
-      accent: 'border-l-4 border-l-slate-400',
+      iconBg: 'bg-[#F1F0E9] text-[#252A27] border border-[#E6E5DD]',
+      accent: 'border-l-4 border-l-[#252A27]',
     },
   };
 
-  const style = variantStyles[variant] || variantStyles.teal;
+  const style = variantStyles[variant] || variantStyles.forest;
 
   return (
     <div
-      className={`bg-white rounded-lg border border-slate-200/90 shadow-sm p-4 transition-all duration-150 hover:border-slate-300 hover:shadow ${style.accent}`}
+      className={`bg-white rounded-xl border border-[#E6E5DD] p-4 sm:p-5 shadow-subtle hover:border-[#A8B8A2]/60 transition-all ${style.accent}`}
     >
-      <div className="flex items-center justify-between">
-        <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+      <div className="flex items-center justify-between mb-3">
+        <span className="text-[11px] font-semibold uppercase tracking-wider text-[#777C76]">
           {title}
         </span>
-        <div className={`w-8 h-8 rounded flex items-center justify-center border ${style.iconBg}`}>
+        <div className={`p-2 rounded-lg ${style.iconBg}`}>
           <Icon className="w-4 h-4" />
         </div>
       </div>
-      <div className="mt-2.5">
-        <div className="flex items-baseline gap-2">
-          <span className="text-2xl font-bold text-slate-900 tracking-tight">{value}</span>
-          {badge && (
-            <span className="text-[11px] font-medium px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200">
-              {badge}
-            </span>
-          )}
-        </div>
-        {subtitle && <p className="text-xs text-slate-500 mt-1 truncate">{subtitle}</p>}
+
+      <div className="flex items-baseline justify-between gap-2">
+        <span className="text-2xl font-heading font-extrabold text-[#183D32] tracking-tight">
+          {value}
+        </span>
+        {badge && (
+          <span
+            className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+              badge.toLowerCase().includes('expired') || badge.toLowerCase().includes('deficit')
+                ? 'bg-[#FEE2E2] text-[#991B1B]'
+                : badge.toLowerCase().includes('restock') || badge.toLowerCase().includes('warning')
+                ? 'bg-[#FEF3C7] text-[#92400E]'
+                : 'bg-[#E7EDE5] text-[#183D32]'
+            }`}
+          >
+            {badge}
+          </span>
+        )}
       </div>
+
+      {subtitle && (
+        <p className="text-[11px] text-[#777C76] mt-1.5 font-medium leading-normal">
+          {subtitle}
+        </p>
+      )}
     </div>
   );
 };

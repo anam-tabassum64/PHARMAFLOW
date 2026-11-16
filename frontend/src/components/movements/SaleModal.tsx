@@ -110,14 +110,14 @@ export const SaleModal: React.FC<SaleModalProps> = ({ isOpen, onClose }) => {
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {errorMsg && (
-          <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs flex items-start gap-2">
+          <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-start gap-2">
             <AlertOctagon className="w-4 h-4 flex-shrink-0 mt-0.5 text-red-600" />
             <span>{errorMsg}</span>
           </div>
         )}
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">
+          <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
             1. Select Medicine *
           </label>
           <select
@@ -128,7 +128,7 @@ export const SaleModal: React.FC<SaleModalProps> = ({ isOpen, onClose }) => {
               setMedicineId(e.target.value);
               setBatchId('');
             }}
-            className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
+            className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] transition-colors"
           >
             <option value="">-- Choose Pharmaceutical Product --</option>
             {medicines?.map((m) => (
@@ -140,7 +140,7 @@ export const SaleModal: React.FC<SaleModalProps> = ({ isOpen, onClose }) => {
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">
+          <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
             2. Select Specific Batch (FEFO / Expiry Enforced) *
           </label>
           <select
@@ -148,7 +148,7 @@ export const SaleModal: React.FC<SaleModalProps> = ({ isOpen, onClose }) => {
             disabled={!medicineId || saleMutation.isPending}
             value={batchId}
             onChange={(e) => setBatchId(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
+            className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] transition-colors"
           >
             <option value="">-- Choose Batch Lot --</option>
             {batches?.map((b) => (
@@ -162,16 +162,16 @@ export const SaleModal: React.FC<SaleModalProps> = ({ isOpen, onClose }) => {
         {/* Selected Batch Status Card */}
         {selectedBatch && (
           <div
-            className={`p-3 rounded-lg border text-xs space-y-2 ${
+            className={`p-4 rounded-xl border text-xs space-y-2 ${
               selectedBatch.is_expired
                 ? 'bg-red-50 border-red-200 text-red-800'
                 : selectedBatch.available_quantity === 0
                 ? 'bg-amber-50 border-amber-200 text-amber-800'
-                : 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                : 'bg-[#E7EDE5] border-[#A8B8A2]/50 text-[#183D32]'
             }`}
           >
             <div className="flex items-center justify-between">
-              <span className="font-semibold">Batch Validation Details:</span>
+              <span className="font-heading font-semibold">Batch Validation Details:</span>
               {selectedBatch.is_expired ? (
                 <Badge variant="danger">EXPIRED - DISPENSING FORBIDDEN</Badge>
               ) : selectedBatch.available_quantity === 0 ? (
@@ -182,18 +182,18 @@ export const SaleModal: React.FC<SaleModalProps> = ({ isOpen, onClose }) => {
             </div>
             <div className="grid grid-cols-3 gap-2 text-[11px] pt-1">
               <div>
-                <span className="text-slate-500 block">Available Qty:</span>
-                <span className="font-bold text-slate-900 font-mono text-sm">
+                <span className="text-[#777C76] block">Available Qty:</span>
+                <span className="font-bold text-[#252A27] font-mono text-sm">
                   {selectedBatch.available_quantity}
                 </span>
               </div>
               <div>
-                <span className="text-slate-500 block">Expiry Date:</span>
-                <span className="font-mono text-slate-800">{selectedBatch.expiry_date}</span>
+                <span className="text-[#777C76] block">Expiry Date:</span>
+                <span className="font-mono text-[#252A27] font-medium">{selectedBatch.expiry_date}</span>
               </div>
               <div>
-                <span className="text-slate-500 block">Unit Sell Price:</span>
-                <span className="font-mono text-slate-900 font-semibold">
+                <span className="text-[#777C76] block">Unit Sell Price:</span>
+                <span className="font-mono text-[#183D32] font-semibold">
                   ${Number(selectedBatch.selling_price).toFixed(2)}
                 </span>
               </div>
@@ -203,7 +203,7 @@ export const SaleModal: React.FC<SaleModalProps> = ({ isOpen, onClose }) => {
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
               Quantity to Dispense *
             </label>
             <input
@@ -214,17 +214,17 @@ export const SaleModal: React.FC<SaleModalProps> = ({ isOpen, onClose }) => {
               disabled={saleMutation.isPending || selectedBatch?.is_expired}
               value={quantity}
               onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
-              className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 font-mono focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] font-mono focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] transition-colors"
             />
             {selectedBatch && !selectedBatch.is_expired && (
-              <span className="text-[11px] text-slate-500 mt-1 block">
+              <span className="text-[11px] text-[#777C76] mt-1 block">
                 Total Value: ${(quantity * Number(selectedBatch.selling_price || 0)).toFixed(2)}
               </span>
             )}
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
               Invoice / Rx Reference
             </label>
             <input
@@ -233,13 +233,13 @@ export const SaleModal: React.FC<SaleModalProps> = ({ isOpen, onClose }) => {
               disabled={saleMutation.isPending}
               value={refNumber}
               onChange={(e) => setRefNumber(e.target.value.toUpperCase())}
-              className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 font-mono placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] font-mono placeholder-[#777C76] focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] transition-colors"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">
+          <label className="block text-xs font-heading font-medium text-[#252A27] mb-1.5">
             Customer / Dispensation Notes
           </label>
           <input
@@ -248,23 +248,23 @@ export const SaleModal: React.FC<SaleModalProps> = ({ isOpen, onClose }) => {
             disabled={saleMutation.isPending}
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-colors"
+            className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F7F2] border border-[#E6E5DD] text-xs text-[#252A27] placeholder-[#777C76] focus:outline-none focus:ring-2 focus:ring-[#183D32]/10 focus:border-[#183D32] transition-colors"
           />
         </div>
 
-        <div className="flex justify-end gap-3 pt-4 border-t border-slate-200">
+        <div className="flex justify-end gap-3 pt-4 border-t border-[#E6E5DD]">
           <button
             type="button"
             onClick={onClose}
             disabled={saleMutation.isPending}
-            className="px-4 py-2 rounded-lg text-xs font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-colors"
+            className="px-4 py-2.5 rounded-xl text-xs font-medium text-[#252A27] bg-white border border-[#E6E5DD] hover:bg-[#F8F7F2] shadow-subtle transition-colors"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={saleMutation.isPending || selectedBatch?.is_expired || !batchId}
-            className="px-5 py-2 rounded-lg text-xs font-semibold bg-teal-700 hover:bg-teal-800 text-white shadow-sm transition-colors disabled:opacity-50 flex items-center gap-1.5"
+            className="px-5 py-2.5 rounded-xl text-xs font-semibold bg-[#183D32] hover:bg-[#122E26] text-white shadow-subtle transition-all duration-150 disabled:opacity-50 flex items-center gap-1.5"
           >
             <Send className="w-3.5 h-3.5" />
             <span>{saleMutation.isPending ? 'Validating...' : 'Complete Dispensing'}</span>
@@ -274,3 +274,4 @@ export const SaleModal: React.FC<SaleModalProps> = ({ isOpen, onClose }) => {
     </Modal>
   );
 };
+export default SaleModal;
